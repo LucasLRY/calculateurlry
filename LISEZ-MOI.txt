@@ -1,0 +1,37 @@
+LRY PROD : calculateur photo & vidéo (application web installable)
+
+CONTENU
+  index.html             l'application
+  manifest.webmanifest   nom, icône, couleurs de l'app
+  sw.js                  fonctionnement hors ligne
+  icons/                 icônes iPhone, Mac et Android
+
+1) METTRE EN LIGNE (une seule fois, gratuit, environ 3 minutes)
+  Netlify Drop :
+  - Allez sur https://app.netlify.com/drop et créez un compte gratuit.
+  - Glissez le DOSSIER "app" entier dans la page.
+  - Vous obtenez une adresse en https://xxxx.netlify.app (renommable dans les réglages du site).
+  Autres solutions : Cloudflare Pages (glisser-déposer) ou GitHub Pages.
+  Il faut du https : sinon l'iPhone ne peut ni installer l'app ni l'utiliser hors ligne.
+
+2) INSTALLER SUR IPHONE
+  - Ouvrez l'adresse dans Safari.
+  - Touchez Partager, puis "Sur l'écran d'accueil", puis Ajouter.
+  - L'app s'ouvre en plein écran et fonctionne hors ligne.
+
+3) INSTALLER SUR MAC
+  - Safari (macOS Sonoma ou plus récent) : menu Fichier > Ajouter au Dock.
+  - Chrome : icône d'installation dans la barre d'adresse.
+
+4) VOS DONNÉES
+  - Profil et devis restent sur l'appareil. Rien n'est envoyé sur internet.
+  - Chaque appareil a ses propres données, et l'app installée sur iPhone ne partage pas
+    celles de Safari.
+  - Pour passer d'un appareil à l'autre : onglet Historique > Exporter (sur iPhone,
+    choisissez "Enregistrer dans Fichiers > iCloud Drive"), puis Importer sur l'autre appareil.
+  - Exportez une sauvegarde régulièrement.
+
+5) METTRE À JOUR L'APP
+  - Remplacez index.html, et changez VERSION dans sw.js (ex. lryprod-v2.0.1).
+  - Glissez à nouveau le dossier sur Netlify (onglet Deploys).
+  - Au lancement suivant, l'app se met à jour.

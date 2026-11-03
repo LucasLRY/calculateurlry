@@ -1,0 +1,2488 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Simulateur de tarifs photo/vidéo pour freelance à Metz : coût de revient, marché Metz/Grand Est 2026, chiffrage projet et devis" />
+  <title>Simulateur Tarifs Photo/Vidéo — Freelance</title>
+
+  <!-- iOS / Android PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="icons/favicon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LRY PROD" />
+  <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    /* === DESIGN TOKENS === */
+    :root,
+    [data-theme='dark'] {
+      --color-bg: #14130f;
+      --color-surface: #1c1b17;
+      --color-surface-2: #232220;
+      --color-surface-offset: #2a2925;
+      --color-surface-dynamic: #33312c;
+      --color-divider: #32302c;
+      --color-border: #3a3833;
+      --color-border-subtle: #2e2c28;
+
+      --color-text: #e8e6e0;
+      --color-text-muted: #9a9892;
+      --color-text-faint: #62605b;
+
+      --color-primary: #e8a73a;
+      --color-primary-hover: #f0b855;
+      --color-primary-active: #d4933a;
+      --color-primary-dim: #b8822a;
+      --color-primary-glow: rgba(232, 167, 58, 0.15);
+
+      --color-success: #5fa83f;
+      --color-success-dim: rgba(95, 168, 63, 0.15);
+      --color-warning: #d4843a;
+      --color-warning-dim: rgba(212, 132, 58, 0.15);
+      --color-danger: #d45050;
+      --color-danger-dim: rgba(212, 80, 80, 0.15);
+      --color-info: #5a9fbf;
+      --color-info-dim: rgba(90, 159, 191, 0.15);
+
+      --radius-sm: 0.375rem;
+      --radius-md: 0.625rem;
+      --radius-lg: 0.875rem;
+      --radius-xl: 1.25rem;
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+
+      --font-display: 'Cabinet Grotesk', 'Inter', sans-serif;
+      --font-body: 'Satoshi', 'Inter', sans-serif;
+
+      --transition: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme='light'] {
+      --color-bg: #f5f3ee;
+      --color-surface: #faf9f6;
+      --color-surface-2: #f0eee8;
+      --color-surface-offset: #ebe8e1;
+      --color-surface-dynamic: #e0ddd5;
+      --color-divider: #dcd9d3;
+      --color-border: #cccac3;
+      --color-border-subtle: #e0ddd5;
+
+      --color-text: #1a1814;
+      --color-text-muted: #6b6862;
+      --color-text-faint: #a8a59f;
+
+      --color-primary: #b8822a;
+      --color-primary-hover: #a07323;
+      --color-primary-active: #8a651e;
+      --color-primary-dim: #d4933a;
+      --color-primary-glow: rgba(184, 130, 42, 0.12);
+
+      --color-success: #4a8a30;
+      --color-success-dim: rgba(74, 138, 48, 0.12);
+      --color-warning: #b8702a;
+      --color-warning-dim: rgba(184, 112, 42, 0.12);
+      --color-danger: #c04040;
+      --color-danger-dim: rgba(192, 64, 64, 0.12);
+      --color-info: #4a8aaa;
+      --color-info-dim: rgba(74, 138, 170, 0.12);
+
+      --shadow-sm: 0 1px 2px rgba(20, 19, 15, 0.06);
+      --shadow-md: 0 4px 12px rgba(20, 19, 15, 0.08);
+      --shadow-lg: 0 12px 32px rgba(20, 19, 15, 0.12);
+    }
+
+    /* === BASE === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
+    body {
+      min-height: 100dvh;
+      line-height: 1.55;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      transition: background-color var(--transition), color var(--transition);
+    }
+    img, svg { display: block; max-width: 100%; }
+    input, button, textarea, select { font: inherit; color: inherit; }
+    button { cursor: pointer; background: none; border: none; }
+    a { color: var(--color-primary); text-decoration: none; transition: color var(--transition); }
+    a:hover { color: var(--color-primary-hover); }
+    h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.2; text-wrap: balance; }
+    p, li { text-wrap: pretty; max-width: 72ch; }
+
+    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+    ::selection { background: var(--color-primary-glow); color: var(--color-text); }
+
+    /* === LAYOUT === */
+    .app { max-width: 1180px; margin: 0 auto; padding: 0 var(--space-4, 1rem); }
+    @media (min-width: 768px) { .app { padding: 0 2rem; } }
+
+    /* === HEADER === */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in oklab, var(--color-bg) 85%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    @media (min-width: 768px) { .header-inner { padding: 0.75rem 2rem; } }
+    .logo { display: flex; align-items: center; gap: 0.625rem; }
+    .logo svg { width: 28px; height: 28px; color: var(--color-primary); }
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      letter-spacing: -0.02em;
+    }
+    .logo-text span { color: var(--color-primary); }
+    .header-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+    .theme-toggle {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      transition: all var(--transition);
+    }
+    .theme-toggle:hover { color: var(--color-primary); border-color: var(--color-primary); }
+    .theme-toggle svg { width: 18px; height: 18px; }
+
+    /* === HERO === */
+    .hero { padding: 3rem 0 2rem; }
+    @media (min-width: 768px) { .hero { padding: 4rem 0 3rem; } }
+    .hero h1 {
+      font-size: clamp(1.875rem, 1.2rem + 3vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .accent { color: var(--color-primary); }
+    .hero p {
+      color: var(--color-text-muted);
+      font-size: 1.0625rem;
+      max-width: 60ch;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+    }
+    .hero-badge svg { width: 14px; height: 14px; color: var(--color-primary); }
+
+    /* === TABS === */
+    .tabs-nav {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: max-content;
+      padding: 0.625rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      transition: all var(--transition);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+    }
+    .tab-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    @media (max-width: 480px) {
+      .tab-btn { font-size: 0.75rem; padding: 0.5rem 0.5rem; }
+      .tab-btn svg { display: none; }
+    }
+    .tab-btn:hover { color: var(--color-text); }
+    .tab-btn.active {
+      background: var(--color-primary);
+      color: #1a1814;
+      font-weight: 600;
+    }
+    [data-theme='light'] .tab-btn.active { color: #fff; }
+
+    /* === TAB CONTENT === */
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* === CARDS === */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: border-color var(--transition);
+    }
+    .card-header { margin-bottom: 1.25rem; }
+    .card-header h2 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .card-header p {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 900px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
+    /* === FORM === */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 0.375rem;
+    }
+    .form-label .hint {
+      font-size: 0.6875rem;
+      color: var(--color-text-faint);
+      font-weight: 400;
+    }
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-glow);
+    }
+    .input-wrapper input,
+    .input-wrapper select {
+      flex: 1;
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 0.9375rem;
+      font-family: var(--font-body);
+      color: var(--color-text);
+    }
+    .input-wrapper input[type="number"]::-webkit-inner-spin-button,
+    .input-wrapper input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none; margin: 0;
+    }
+    .input-prefix, .input-suffix {
+      padding: 0 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--color-text-faint);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%239a9892' stroke-width='2'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+    select option { background: var(--color-surface); }
+
+    /* Range slider */
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .range-row input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: var(--radius-full);
+      background: var(--color-surface-dynamic);
+      outline: none;
+    }
+    .range-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+    .range-row input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .range-row input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      cursor: pointer;
+      border: none;
+    }
+    .range-value {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      min-width: 3rem;
+      text-align: right;
+    }
+
+    /* === RESET BUTTON === */
+    .reset-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.5rem 0.875rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-2);
+      transition: all var(--transition);
+    }
+    .btn-reset:hover {
+      color: var(--color-danger);
+      border-color: var(--color-danger);
+    }
+    .btn-reset svg { width: 14px; height: 14px; }
+
+    /* === TOAST === */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      font-size: 0.8125rem;
+      color: var(--color-text);
+      z-index: 100;
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast svg { width: 16px; height: 16px; color: var(--color-success); }
+
+    /* === PRESETS === */
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .preset-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.4375rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-subtle);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .preset-chip:hover {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+    .preset-chip svg { width: 14px; height: 14px; }
+
+    /* === DEVIS === */
+    .devis-container { display: flex; flex-direction: column; gap: 1.5rem; }
+    .devis-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 600px) {
+      .devis-inputs { grid-template-columns: 1fr; }
+    }
+    .devis-inputs .full { grid-column: 1 / -1; }
+    .devis-preview {
+      background: #fff;
+      color: #1a1a1a;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .devis-preview .devis-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #1a1a1a;
+      margin-bottom: 1rem;
+    }
+    .devis-preview .devis-artist {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #b8860b;
+    }
+    .devis-preview .devis-meta { font-size: 0.75rem; color: #666; }
+    .devis-preview .devis-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .devis-preview .devis-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #999;
+      margin-bottom: 0.125rem;
+    }
+    .devis-preview .devis-value { font-weight: 500; }
+    .devis-preview table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    .devis-preview th {
+      text-align: left;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #999;
+      padding: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .devis-preview td { padding: 0.5rem; border-bottom: 1px solid #eee; }
+    .devis-preview .devis-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-top: 2px solid #1a1a1a;
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+    .devis-preview .devis-conditions {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.6875rem;
+      color: #666;
+    }
+    .devis-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-2);
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-action:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .btn-action svg { width: 16px; height: 16px; }
+    .btn-action.primary {
+      background: var(--color-primary);
+      color: #1a1814;
+      border-color: var(--color-primary);
+    }
+    .btn-action.primary:hover { opacity: 0.85; }
+
+    /* === STICKY MOBILE BAR === */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.625rem 1rem;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+      z-index: 50;
+    }
+    .sticky-bar.show { display: flex; }
+    .sticky-bar .sticky-price {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+    .sticky-bar .sticky-label { font-size: 0.625rem; text-transform: uppercase; color: var(--color-text-faint); letter-spacing: 0.05em; }
+    .sticky-bar .sticky-value { font-family: var(--font-display); font-weight: 700; font-size: 1.125rem; color: var(--color-primary); }
+    .sticky-bar .sticky-cta { padding: 0.5rem 0.875rem; font-size: 0.8125rem; }
+    @media (max-width: 600px) {
+      .sticky-bar.show { display: flex; }
+      main { padding-bottom: 5rem; }
+    }
+
+    /* === DEVIS HISTORY === */
+    .devis-history {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .devis-history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-subtle);
+      gap: 0.75rem;
+      transition: all var(--transition);
+    }
+    .devis-history-item:hover {
+      border-color: var(--color-primary);
+    }
+    .devis-history-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      min-width: 0;
+      flex: 1;
+    }
+    .devis-history-title {
+      font-weight: 500;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .devis-history-meta {
+      font-size: 0.6875rem;
+      color: var(--color-text-faint);
+    }
+    .devis-history-actions {
+      display: flex;
+      gap: 0.375rem;
+      flex-shrink: 0;
+    }
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .icon-btn:hover { color: var(--color-primary); border-color: var(--color-primary); }
+    .icon-btn.danger:hover { color: var(--color-error); border-color: var(--color-error); }
+    .icon-btn svg { width: 14px; height: 14px; }
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--color-text-faint);
+      font-size: 0.875rem;
+    }
+
+    /* === DASHBOARD === */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+    @media (min-width: 700px) {
+      .dashboard-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .dash-card {
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-subtle);
+    }
+    .dash-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-faint);
+      margin-bottom: 0.375rem;
+    }
+    .dash-value {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-text);
+    }
+    .dash-value.accent { color: var(--color-primary); }
+    .dash-value.success { color: var(--color-success); }
+    .dash-value.danger { color: var(--color-error); }
+    .dash-sub {
+      font-size: 0.6875rem;
+      color: var(--color-text-faint);
+      margin-top: 0.125rem;
+    }
+    .progress-bar {
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: var(--color-surface);
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: var(--radius-full);
+      background: var(--color-primary);
+      transition: width 0.5s ease;
+    }
+    .progress-fill.danger { background: var(--color-error); }
+    .progress-fill.success { background: var(--color-success); }
+
+    @media print {
+      body { background: white; color: black; }
+      header, .hero, .tabs-nav, footer, .toast, .sticky-bar, .devis-actions, .devis-inputs-card { display: none !important; }
+      .tab-content { display: none !important; }
+      .tab-content[data-content="devis"] { display: block !important; }
+      .devis-preview { box-shadow: none; padding: 0; }
+    }
+
+    /* === ACCORDION === */
+    .accordion {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color var(--transition), background var(--transition);
+      text-align: left;
+    }
+    .accordion-trigger:hover { color: var(--color-text); background: var(--color-surface-2); }
+    .accordion-trigger .chevron {
+      width: 16px; height: 16px;
+      transition: transform var(--transition);
+      color: var(--color-text-faint);
+    }
+    .accordion.open .accordion-trigger .chevron { transform: rotate(180deg); }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .accordion.open .accordion-content { max-height: 800px; }
+    .accordion-inner { padding: 0.5rem 1rem 1rem; }
+
+    /* === RESULT DISPLAY === */
+    .result-hero {
+      text-align: center;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--color-primary-glow), transparent);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.5rem;
+    }
+    .result-hero .label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .result-hero .value {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+      font-weight: 800;
+      color: var(--color-primary);
+      letter-spacing: -0.03em;
+    }
+    .result-hero .sub {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      margin-top: 0.375rem;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    @media (min-width: 600px) { .result-grid { grid-template-columns: 1fr 1fr; } }
+
+    .result-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--color-surface-2);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-subtle);
+    }
+    .result-item .label {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      flex: 1;
+      min-width: 0;
+    }
+    .result-item .value {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-text);
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .result-item .value.accent { color: var(--color-primary); }
+
+    /* === BADGE === */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.1875rem 0.5rem;
+      border-radius: var(--radius-full);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-success { background: var(--color-success-dim); color: var(--color-success); }
+    .badge-warning { background: var(--color-warning-dim); color: var(--color-warning); }
+    .badge-danger { background: var(--color-danger-dim); color: var(--color-danger); }
+    .badge-info { background: var(--color-info-dim); color: var(--color-info); }
+    .badge-neutral { background: var(--color-surface-dynamic); color: var(--color-text-muted); }
+
+    /* === MARKET TABLE === */
+    .market-section { margin-bottom: 2rem; }
+    .market-section:last-child { margin-bottom: 0; }
+    .market-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .market-section h3 .icon { color: var(--color-primary); }
+    .market-section h3 .icon svg { width: 18px; height: 18px; }
+
+    .market-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .market-table th {
+      text-align: left;
+      padding: 0.625rem 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border-subtle);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .market-table td {
+      padding: 0.625rem 0.75rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+      color: var(--color-text);
+    }
+    .market-table tr:last-child td { border-bottom: none; }
+    .market-table .level { font-weight: 600; }
+    .market-table .range { font-family: var(--font-display); font-weight: 600; color: var(--color-primary); }
+    .market-table .compare-cell { text-align: right; }
+    .market-table .your-tjm {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9375rem;
+    }
+
+    /* === PROJECT GRILLE === */
+    .grille-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    @media (min-width: 600px) { .grille-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .grille-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .grille-card {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .grille-card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
+    .grille-card .type {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .grille-card .desc {
+      font-size: 0.75rem;
+      color: var(--color-text-faint);
+      margin-bottom: 0.75rem;
+      min-height: 2.25rem;
+    }
+    .grille-card .prices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+    .grille-card .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8125rem;
+    }
+    .grille-card .price-row .label { color: var(--color-text-muted); }
+    .grille-card .price-row .amount {
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+    .grille-card .price-row.plancher .amount { color: var(--color-text-muted); }
+    .grille-card .price-row.recommande .amount { color: var(--color-primary); font-size: 1rem; }
+    .grille-card .price-row.premium .amount { color: var(--color-success); }
+
+    /* === SECTION DIVIDER === */
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .section-title:first-child { margin-top: 0; }
+
+    /* === INFO NOTE === */
+    .info-note {
+      display: flex;
+      gap: 0.625rem;
+      padding: 0.875rem 1rem;
+      background: var(--color-info-dim);
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem;
+      color: var(--color-text);
+      line-height: 1.5;
+      margin-top: 1rem;
+    }
+    .info-note svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--color-info); margin-top: 2px; }
+
+    /* === FOOTER === */
+    footer {
+      margin-top: 4rem;
+      padding: 2rem 0;
+      border-top: 1px solid var(--color-border-subtle);
+    }
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    @media (min-width: 768px) { .footer-inner { padding: 0 2rem; } }
+    .footer-inner p {
+      font-size: 0.75rem;
+      color: var(--color-text-faint);
+      margin-bottom: 0.5rem;
+    }
+    .footer-inner a { font-size: 0.75rem; color: var(--color-text-muted); }
+    .footer-inner a:hover { color: var(--color-primary); }
+
+    /* === UTIL === */
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .mt-6 { margin-top: 1.5rem; }
+    .text-sm { font-size: 0.8125rem; }
+    .text-muted { color: var(--color-text-muted); }
+    .text-faint { color: var(--color-text-faint); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* === v2 : tokens manquants + ajouts === */
+    :root { --radius-full: 999px; --color-error: var(--color-danger); }
+    .form-label { gap: 0.75rem; }
+    .form-label .hint { text-align: right; }
+    textarea.ta {
+      width: 100%; min-height: 4.5rem; padding: 0.625rem 0.875rem; resize: vertical;
+      background: none; border: none; outline: none; font-size: 0.9375rem; color: var(--color-text);
+    }
+    .check-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--color-text-muted); cursor: pointer; }
+    .check-row input { accent-color: var(--color-primary); width: 16px; height: 16px; }
+    .alerts { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .alert { display: flex; gap: 0.625rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.8125rem; line-height: 1.5; }
+    .alert svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+    .alert.warn { background: var(--color-warning-dim); } .alert.warn svg { color: var(--color-warning); }
+    .alert.danger { background: var(--color-danger-dim); } .alert.danger svg { color: var(--color-danger); }
+    .alert.ok { background: var(--color-success-dim); } .alert.ok svg { color: var(--color-success); }
+    .alert.info { background: var(--color-info-dim); } .alert.info svg { color: var(--color-info); }
+    .preset-group-label { width: 100%; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-faint); margin-top: 0.25rem; }
+    .preset-chip.active { color: var(--color-primary); border-color: var(--color-primary); background: var(--color-primary-glow); }
+    .grille-card .market { margin-top: 0.75rem; padding-top: 0.625rem; border-top: 1px dashed var(--color-border); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--color-text-muted); }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .market-table { min-width: 520px; }
+    .market-table .metz { font-family: var(--font-display); font-weight: 700; color: var(--color-text); }
+    .status-select { font-size: 0.75rem; padding: 0.25rem 1.75rem 0.25rem 0.5rem; border-radius: var(--radius-sm); background-color: var(--color-surface); border: 1px solid var(--color-border); }
+    .devis-preview .devis-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.8125rem; }
+    .devis-preview .devis-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; font-size: 0.75rem; }
+    .devis-preview .devis-sign div { border: 1px solid #ccc; border-radius: 6px; padding: 0.625rem; min-height: 5.5rem; }
+    .devis-preview .pre { white-space: pre-line; }
+    @media (max-width: 600px) { .devis-preview { padding: 1.25rem; } .devis-preview .devis-parties, .devis-preview .devis-info { grid-template-columns: 1fr; } }
+    .source-list { font-size: 0.75rem; color: var(--color-text-muted); padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+    .source-list a { color: var(--color-text-muted); text-decoration: underline; }
+    .budget-result { margin-top: 0.75rem; }
+    @media print {
+      .devis-preview { font-size: 11pt; }
+      main { padding-bottom: 0 !important; }
+    }
+    @media (min-width: 601px) { .sticky-bar.show { display: none; } }
+    /* === APP (PWA) : encoche, barre d'accueil, zoom iOS === */
+    header { padding-top: env(safe-area-inset-top); }
+    .header-inner, .app, .footer-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+    .sticky-bar { padding-bottom: calc(0.625rem + env(safe-area-inset-bottom)); }
+    .toast { bottom: calc(1.5rem + env(safe-area-inset-bottom)); }
+    @media (max-width: 600px) {
+      input, select, textarea { font-size: 16px !important; } /* évite le zoom auto d'iOS */
+      main { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+      .tabs-nav { position: sticky; top: calc(61px + env(safe-area-inset-top)); z-index: 40; }
+    }
+    @media (display-mode: standalone) {
+      body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+      input, textarea, .devis-preview { -webkit-user-select: text; user-select: text; }
+      .hero { padding: 1.5rem 0 1.25rem; }
+      .hero p, .hero-badges { display: none; }
+    }
+    @media (hover: none) { .preset-chip:hover { color: var(--color-text-muted); border-color: var(--color-border-subtle); } .grille-card:hover { transform: none; border-color: var(--color-border-subtle); } }
+    @media (max-width: 600px) { .toast { bottom: calc(5.5rem + env(safe-area-inset-bottom)); } .preset-chip { font-size: 0.8125rem; padding: 0.375rem 0.625rem; } }
+    .install-hint { display: none; align-items: flex-start; gap: 0.625rem; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: var(--radius-md); background: var(--color-primary-glow); border: 1px solid var(--color-primary-dim); font-size: 0.8125rem; }
+    .install-hint.show { display: flex; }
+    .install-hint button { margin-left: auto; color: var(--color-text-muted); font-size: 1.1rem; line-height: 1; padding: 0 0.25rem; }
+    @media print { .no-print { display: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- SVG Logo -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="icon-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M2 8h3l1.5-2h3L9 8h6l1.5-2h3L21 8h1v12H2V8z"/>
+      <circle cx="12" cy="14" r="3.5"/>
+    </symbol>
+    <symbol id="icon-calculator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="4" y="2" width="16" height="20" rx="2"/>
+      <line x1="8" y1="6" x2="16" y2="6"/>
+      <line x1="8" y1="11" x2="8" y2="11"/>
+      <line x1="12" y1="11" x2="12" y2="11"/>
+      <line x1="16" y1="11" x2="16" y2="11"/>
+      <line x1="8" y1="15" x2="8" y2="15"/>
+      <line x1="12" y1="15" x2="12" y2="15"/>
+      <line x1="16" y1="15" x2="16" y2="15"/>
+      <line x1="8" y1="19" x2="8" y2="19"/>
+      <line x1="12" y1="19" x2="12" y2="19"/>
+      <line x1="16" y1="19" x2="16" y2="19"/>
+    </symbol>
+    <symbol id="icon-market" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 3v18h18"/>
+      <path d="M7 14l4-4 4 4 5-5"/>
+    </symbol>
+    <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      <rect x="14" y="14" width="7" height="7" rx="1"/>
+    </symbol>
+    <symbol id="icon-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12"/>
+    </symbol>
+    <symbol id="icon-invoice" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="13" y2="17"/>
+    </symbol>
+    <symbol id="icon-print" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8"/>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="3 6 5 6 21 6"/>
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    </symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="9" y="9" width="13" height="13" rx="2"/>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+    </symbol>
+    <symbol id="icon-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+      <polyline points="17 21 17 13 7 13 7 21"/>
+      <polyline points="7 3 7 8 15 8"/>
+    </symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="20" x2="18" y2="10"/>
+      <line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
+    </symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    </symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="16" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </symbol>
+    <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </symbol>
+    <symbol id="icon-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M23 7l-7 5 7 5V7z"/>
+      <rect x="1" y="5" width="15" height="14" rx="2"/>
+    </symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"/>
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="23 4 23 10 17 10"/>
+      <polyline points="1 20 1 14 7 14"/>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </symbol>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></symbol>
+    <symbol id="icon-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 15 14"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <svg><use href="#icon-logo"/></svg>
+      <span class="logo-text">LRY <span>PROD</span></span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" data-theme-toggle aria-label="Basculer le thème">
+        <svg><use href="#icon-moon"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="app">
+  <section class="hero">
+    <h1>Simulateur de tarifs <span class="accent">photo &amp; vidéo</span></h1>
+    <p>Outil sur mesure pour freelance basé à Metz : calculez votre coût de revient réel, comparez-vous au marché messin et Grand Est 2026, chiffrez chaque projet et éditez un devis conforme.</p>
+    <div class="hero-badges">
+      <span class="hero-badge"><svg><use href="#icon-location"/></svg> Metz / Grand Est / Luxembourg</span>
+      <span class="hero-badge"><svg><use href="#icon-market"/></svg> Taux URSSAF &amp; TVA 2026</span>
+      <span class="hero-badge"><svg><use href="#icon-save"/></svg> Sauvegarde locale + export</span>
+    </div>
+  </section>
+
+  <div class="install-hint" id="install-hint" role="note">
+    <svg style="width:18px;height:18px;flex-shrink:0;color:var(--color-primary)"><use href="#icon-upload"/></svg>
+    <span id="install-hint-text"></span>
+    <button id="install-hint-close" aria-label="Masquer">×</button>
+  </div>
+
+  <nav class="tabs-nav" role="tablist">
+    <button class="tab-btn active" data-tab="cout" role="tab" aria-selected="true"><svg><use href="#icon-calculator"/></svg> Coût de revient</button>
+    <button class="tab-btn" data-tab="marche" role="tab" aria-selected="false"><svg><use href="#icon-market"/></svg> Marché Metz 2026</button>
+    <button class="tab-btn" data-tab="projet" role="tab" aria-selected="false"><svg><use href="#icon-grid"/></svg> Projet</button>
+    <button class="tab-btn" data-tab="devis" role="tab" aria-selected="false"><svg><use href="#icon-invoice"/></svg> Devis</button>
+    <button class="tab-btn" data-tab="historique" role="tab" aria-selected="false"><svg><use href="#icon-history"/></svg> Historique</button>
+    <button class="tab-btn" data-tab="dashboard" role="tab" aria-selected="false"><svg><use href="#icon-chart"/></svg> Dashboard</button>
+  </nav>
+
+  <!-- ============ TAB 1 : COÛT DE REVIENT ============ -->
+  <div class="tab-content active" data-content="cout" role="tabpanel">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h2>Votre profil financier</h2>
+          <p>Toutes les valeurs sont annuelles et hors taxes.</p>
+        </div>
+
+        <div class="section-title">Revenu cible</div>
+        <div class="form-group">
+          <label class="form-label" for="salaire-net">Revenu net cible / an<span class="hint">après cotisations, avant impôt</span></label>
+          <div class="input-wrapper"><input type="number" id="salaire-net" value="30000" min="0" step="1000" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ir-pct">Provision impôt sur le revenu<span class="hint">votre taux de prélèvement à la source (0 si non souhaité)</span></label>
+          <div class="input-wrapper"><input type="number" id="ir-pct" value="0" min="0" max="45" step="0.5" data-calc="cout" /><span class="input-suffix">%</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="statut">Statut juridique<span class="hint">taux 2026</span></label>
+          <div class="input-wrapper">
+            <select id="statut" data-calc="cout">
+              <option value="micro_bnc">Micro BNC libéral : 25,8 % du CA (vidéaste, photographe hors artisan)</option>
+              <option value="micro_bnc_vl">Micro BNC + versement libératoire : 28 % du CA</option>
+              <option value="micro_bic">Micro BIC artisan : 21,5 % du CA (photographe inscrit CMA)</option>
+              <option value="micro_bic_vl">Micro BIC artisan + versement libératoire : 23,2 % du CA</option>
+              <option value="ei">EI au réel (TNS) : environ 45 % du revenu net</option>
+              <option value="eurl">EURL à l'IS, gérant TNS : environ 45 % du revenu net</option>
+              <option value="sasu" selected>SASU, président salarié : environ 80 % du salaire net</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-title">Charges fixes annuelles</div>
+        <div class="form-group">
+          <label class="form-label" for="assurance-pro">Assurances (RC pro + matériel)</label>
+          <div class="input-wrapper"><input type="number" id="assurance-pro" value="800" min="0" step="50" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="compta">Expert-comptable / logiciel de facturation</label>
+          <div class="input-wrapper"><input type="number" id="compta" value="1200" min="0" step="100" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="autres-charges">Autres charges fixes<span class="hint">CFE, banque, mutuelle, télécom, local, véhicule</span></label>
+          <div class="input-wrapper"><input type="number" id="autres-charges" value="2400" min="0" step="100" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="communication">Communication &amp; prospection<span class="hint">site, portfolio, pub, salons, réseau</span></label>
+          <div class="input-wrapper"><input type="number" id="communication" value="600" min="0" step="100" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+        </div>
+
+        <div class="accordion" id="acc-equipement">
+          <button class="accordion-trigger" data-accordion="acc-equipement"><span>Équipement &amp; logiciels</span><svg class="chevron"><use href="#icon-chevron"/></svg></button>
+          <div class="accordion-content"><div class="accordion-inner">
+            <div class="form-group">
+              <label class="form-label" for="amortissement">Amortissement / renouvellement matériel<span class="hint">valeur du parc ÷ 3 à 5 ans</span></label>
+              <div class="input-wrapper"><input type="number" id="amortissement" value="6000" min="0" step="500" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="logiciels">Abonnements<span class="hint">Adobe, DaVinci, musique sous licence, cloud, Frame.io</span></label>
+              <div class="input-wrapper"><input type="number" id="logiciels" value="900" min="0" step="50" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="formation">Formation &amp; développement</label>
+              <div class="input-wrapper"><input type="number" id="formation" value="1000" min="0" step="100" data-calc="cout" /><span class="input-suffix">€/an</span></div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="accordion" id="acc-jours">
+          <button class="accordion-trigger" data-accordion="acc-jours"><span>Temps facturable &amp; consommables</span><svg class="chevron"><use href="#icon-chevron"/></svg></button>
+          <div class="accordion-content"><div class="accordion-inner">
+            <div class="form-group">
+              <label class="form-label" for="jours-facturables">Jours réellement facturés / an<span class="hint">tournage + post-prod payée. Réaliste : 110 à 150</span></label>
+              <div class="range-row"><input type="range" id="jours-facturables" min="60" max="220" value="140" step="5" data-calc="cout" /><span class="range-value" id="jours-val">140 j</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="heures-jour">Heures productives par jour</label>
+              <div class="range-row"><input type="range" id="heures-jour" min="6" max="10" value="8" step="0.5" data-calc="cout" /><span class="range-value" id="heures-jour-val">8 h</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="frais-variables">Consommables par jour facturé<span class="hint">disques, cartes, piles, stockage. Les déplacements se chiffrent par projet</span></label>
+              <div class="input-wrapper"><input type="number" id="frais-variables" value="20" min="0" step="5" data-calc="cout" /><span class="input-suffix">€/jour</span></div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="reset-row">
+          <button class="btn-reset" id="btn-reset"><svg><use href="#icon-refresh"/></svg> Réinitialiser le profil</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="result-hero">
+          <div class="label">TJM plancher (seuil de rentabilité)</div>
+          <div class="value" id="tjm-plancher">— €</div>
+          <div class="sub" id="tjm-plancher-sub">En dessous de ce montant, vous perdez de l'argent</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>Décomposition du calcul</h2></div>
+          <div class="result-grid" id="cout-breakdown"></div>
+          <div class="alerts" id="cout-alerts"></div>
+        </div>
+        <div class="info-note">
+          <svg><use href="#icon-info"/></svg>
+          <span id="formule-note"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2 : MARCHÉ ============ -->
+  <div class="tab-content" data-content="marche" role="tabpanel">
+    <div class="card mb-6">
+      <div class="card-header">
+        <h2>Votre position sur le marché</h2>
+        <p>Comparaison de votre TJM plancher et de votre TJM conseillé (avec la marge de l'onglet Projet) aux repères nationaux et à l'estimation Metz / Grand Est.</p>
+      </div>
+      <div class="grid-2" style="margin-bottom:1.5rem">
+        <div class="result-hero" style="margin:0">
+          <div class="label">TJM plancher</div>
+          <div class="value" id="marche-plancher">— €</div>
+          <div class="sub" id="marche-plancher-pos">—</div>
+        </div>
+        <div class="result-hero" style="margin:0">
+          <div class="label">TJM conseillé (marge incluse)</div>
+          <div class="value" id="marche-conseille">— €</div>
+          <div class="sub" id="marche-conseille-pos">—</div>
+        </div>
+      </div>
+
+      <div class="market-section">
+        <h3><span class="icon"><svg><use href="#icon-video"/></svg></span> Vidéaste / cadreur-monteur</h3>
+        <div class="table-scroll"><table class="market-table" id="table-video">
+          <thead><tr><th>Niveau</th><th>National 2026</th><th>Metz / Grand Est</th><th class="compare-cell">Votre TJM conseillé</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+      <div class="market-section">
+        <h3><span class="icon"><svg><use href="#icon-camera"/></svg></span> Photographe</h3>
+        <div class="table-scroll"><table class="market-table" id="table-photo">
+          <thead><tr><th>Niveau</th><th>National 2026</th><th>Metz / Grand Est</th><th class="compare-cell">Votre TJM conseillé</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+
+      <div class="info-note">
+        <svg><use href="#icon-info"/></svg>
+        <span>La colonne Metz / Grand Est est une estimation : la décote de 10 à 20 % par rapport aux baromètres nationaux (tirés par Paris) est recoupée avec les tarifs affichés par des freelances messins (environ 400 €/j pour un vidéaste-photographe) et des forfaits publiés en Moselle et à Nancy. Les plateformes low-cost (Codeur : 120 à 260 €/j) tirent les moyennes vers le bas et ne sont pas une cible. En photo, le forfait domine largement le TJM.</span>
+      </div>
+    </div>
+
+    <div class="card mb-6">
+      <div class="card-header">
+        <h2>Forfaits observés à Metz / Grand Est (2026)</h2>
+        <p>Fourchettes de prix HT pratiquées localement par des indépendants. Les agences facturent en général 1,5 à 3 fois plus.</p>
+      </div>
+      <div class="grid-2" id="specialites-grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>Spécificités du territoire</h2></div>
+      <div class="alerts" style="margin-top:0">
+        <div class="alert info"><svg><use href="#icon-location"/></svg><span><strong>Luxembourg (30 min) :</strong> les budgets corporate y sont plus élevés et le tarif de 400 €/j d'un freelance messin y paraît bas. Une majoration de 15 à 25 % reste compétitive. Pour un client professionnel luxembourgeois, facturez sans TVA française avec la mention d'autoliquidation (option disponible dans le devis) et indiquez son numéro de TVA intracommunautaire.</span></div>
+        <div class="alert info"><svg><use href="#icon-location"/></svg><span><strong>Nancy, Strasbourg, Reims :</strong> marché comparable à Metz. Strasbourg est un peu plus cher (institutions européennes, agences). Facturez le temps de trajet : Metz-Strasbourg, c'est 3 h 30 aller-retour.</span></div>
+        <div class="alert info"><svg><use href="#icon-location"/></svg><span><strong>Sarre / Allemagne :</strong> clientèle B2B accessible depuis Metz. Même règle d'autoliquidation que pour le Luxembourg, et un devis bilingue est un vrai plus.</span></div>
+        <div class="alert warn"><svg><use href="#icon-alert"/></svg><span><strong>Drone :</strong> pour une prestation rémunérée, il faut être exploitant enregistré (AlphaTango), détenir le brevet adapté et une assurance spécifique. La proximité de l'aéroport de Metz-Nancy-Lorraine, de la BA 133 et de zones militaires restreint fortement les vols. Vendez-le en option (+150 à 400 €).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3 : PROJET ============ -->
+  <div class="tab-content" data-content="projet" role="tabpanel">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h2>Configuration du projet</h2>
+          <p>Choisissez un type de prestation pour pré-remplir les temps, puis ajustez-les.</p>
+        </div>
+        <div class="presets" id="presets"></div>
+
+        <div class="section-title">Temps par phase (heures)</div>
+        <div class="form-group">
+          <label class="form-label" for="heures-preprod">Pré-production<span class="hint">brief, devis, repérage, script, prépa matériel</span></label>
+          <div class="range-row"><input type="range" id="heures-preprod" min="0" max="40" value="4" step="0.5" data-calc="projet" /><span class="range-value" id="preprod-val">4 h</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="heures-tournage">Tournage / prise de vue<span class="hint">présence sur site, installation comprise</span></label>
+          <div class="range-row"><input type="range" id="heures-tournage" min="0" max="40" value="8" step="0.5" data-calc="projet" /><span class="range-value" id="tournage-val">8 h</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="heures-postprod">Post-production<span class="hint">dérushage, montage, étalonnage, mixage, retouche, allers-retours</span></label>
+          <div class="range-row"><input type="range" id="heures-postprod" min="0" max="80" value="12" step="0.5" data-calc="projet" /><span class="range-value" id="postprod-val">12 h</span></div>
+        </div>
+
+        <div class="section-title">Déplacement</div>
+        <div class="devis-inputs">
+          <div class="form-group">
+            <label class="form-label" for="km">Distance aller-retour</label>
+            <div class="input-wrapper"><input type="number" id="km" value="30" min="0" step="10" data-calc="projet" /><span class="input-suffix">km</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="eur-km">Coût kilométrique</label>
+            <div class="input-wrapper"><input type="number" id="eur-km" value="0.5" min="0" step="0.05" data-calc="projet" /><span class="input-suffix">€/km</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="heures-trajet">Temps de trajet A/R<span class="hint">facturé au taux horaire</span></label>
+            <div class="input-wrapper"><input type="number" id="heures-trajet" value="0.5" min="0" step="0.5" data-calc="projet" /><span class="input-suffix">h</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="frais-annexes">Péages, parking, repas, hôtel</label>
+            <div class="input-wrapper"><input type="number" id="frais-annexes" value="0" min="0" step="10" data-calc="projet" /><span class="input-suffix">€</span></div>
+          </div>
+        </div>
+
+        <div class="section-title">Frais &amp; marges</div>
+        <div class="form-group">
+          <label class="form-label" for="frais-projet">Frais techniques spécifiques<span class="hint">location studio ou matériel, assistant, comédien, musique</span></label>
+          <div class="input-wrapper"><input type="number" id="frais-projet" value="0" min="0" step="50" data-calc="projet" /><span class="input-suffix">€</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="marge">Marge commerciale<span class="hint">sur le temps de travail : aléas, négociation, investissement</span></label>
+          <div class="range-row"><input type="range" id="marge" min="0" max="60" value="20" step="5" data-calc="projet" /><span class="range-value" id="marge-val">20%</span></div>
+        </div>
+
+        <div class="accordion" id="acc-marge">
+          <button class="accordion-trigger" data-accordion="acc-marge"><span>Droits, urgence, zone &amp; frais refacturés</span><svg class="chevron"><use href="#icon-chevron"/></svg></button>
+          <div class="accordion-content"><div class="accordion-inner">
+            <div class="form-group">
+              <label class="form-label" for="droits-usage">Cession de droits d'exploitation<span class="hint">0 % = usage limité (web/réseaux) · 20 à 50 % = pub, TV, affichage</span></label>
+              <div class="range-row"><input type="range" id="droits-usage" min="0" max="60" value="0" step="5" data-calc="projet" /><span class="range-value" id="droits-val">0%</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="urgence">Délai de livraison</label>
+              <div class="input-wrapper"><select id="urgence" data-calc="projet">
+                <option value="1" selected>Standard</option>
+                <option value="1.25">Urgent : moins d'une semaine (+25 %)</option>
+                <option value="1.5">Express : 48-72 h (+50 %)</option>
+              </select></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="zone">Localisation du client<span class="hint">ajustement commercial sur le temps vendu</span></label>
+              <div class="input-wrapper"><select id="zone" data-calc="projet">
+                <option value="metz" selected>Metz / Moselle / Grand Est (référence)</option>
+                <option value="luxembourg">Luxembourg / Sarre / Belgique (+20 %)</option>
+                <option value="paris">Client parisien / grand compte (+15 %)</option>
+                <option value="national">Autre région, déplacement long (+5 %)</option>
+              </select></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="maj-frais">Majoration des frais refacturés<span class="hint">gestion, avance de trésorerie (10 % est courant)</span></label>
+              <div class="range-row"><input type="range" id="maj-frais" min="0" max="20" value="0" step="5" data-calc="projet" /><span class="range-value" id="maj-frais-val">0%</span></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="result-hero">
+          <div class="label">Prix recommandé HT</div>
+          <div class="value" id="prix-recommande">— €</div>
+          <div class="sub" id="prix-detail">—</div>
+        </div>
+        <div class="alerts" id="projet-market" style="margin:0 0 1.5rem"></div>
+
+        <div class="card mb-6">
+          <div class="card-header"><h2>Niveaux de prix</h2><p>Plancher : rentabilité nulle. Recommandé : votre prix. Premium : le prix d'ancrage d'une offre à trois niveaux.</p></div>
+          <div class="result-grid" id="projet-niveaux"></div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-header"><h2>Décomposition interne</h2><p>Pour vous seulement : le devis client ne montre jamais la marge.</p></div>
+          <div class="result-grid" id="projet-breakdown"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h2>Vérifier un budget client</h2><p>Le client annonce un budget ? Voyez ce qu'il vous rapporte vraiment.</p></div>
+          <div class="input-wrapper"><input type="number" id="budget-client" placeholder="Ex : 1500" min="0" step="50" /><span class="input-suffix">€ HT</span></div>
+          <div class="budget-result" id="budget-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-6">
+      <div class="card-header">
+        <h2>Grille tarifaire complète</h2>
+        <p>Calculée avec votre TJM, votre marge et la zone choisie, comparée aux prix observés à Metz. Cliquez sur une carte pour la charger dans le projet.</p>
+      </div>
+      <div class="grille-grid" id="grille-grid"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4 : DEVIS ============ -->
+  <div class="tab-content" data-content="devis" role="tabpanel">
+    <div class="devis-container">
+      <div class="card devis-inputs-card">
+        <div class="card-header">
+          <h2>Informations du devis</h2>
+          <p>Le montant vient de l'onglet Projet. La marge et l'ajustement de zone sont répartis dans les lignes de prestation.</p>
+        </div>
+
+        <div class="accordion" id="acc-ident" style="margin-top:0;margin-bottom:1rem">
+          <button class="accordion-trigger" data-accordion="acc-ident"><span>Vos informations (à remplir une fois, mentions obligatoires)</span><svg class="chevron"><use href="#icon-chevron"/></svg></button>
+          <div class="accordion-content"><div class="accordion-inner"><div class="devis-inputs">
+            <div class="form-group"><label class="form-label" for="id-nom">Nom commercial</label><div class="input-wrapper"><input type="text" id="id-nom" value="LRY PROD" data-calc="ident" /></div></div>
+            <div class="form-group"><label class="form-label" for="id-titulaire">Nom et prénom / forme juridique</label><div class="input-wrapper"><input type="text" id="id-titulaire" placeholder="Ex : Prénom Nom, EI" data-calc="ident" /></div></div>
+            <div class="form-group"><label class="form-label" for="id-siret">SIRET</label><div class="input-wrapper"><input type="text" id="id-siret" placeholder="14 chiffres" data-calc="ident" /></div></div>
+            <div class="form-group"><label class="form-label" for="id-tvaintra">N° TVA intracom.<span class="hint">si assujetti</span></label><div class="input-wrapper"><input type="text" id="id-tvaintra" placeholder="FR..." data-calc="ident" /></div></div>
+            <div class="form-group full"><label class="form-label" for="id-adresse">Adresse</label><div class="input-wrapper"><input type="text" id="id-adresse" placeholder="Rue, 57000 Metz" data-calc="ident" /></div></div>
+            <div class="form-group"><label class="form-label" for="id-email">E-mail</label><div class="input-wrapper"><input type="text" id="id-email" data-calc="ident" /></div></div>
+            <div class="form-group"><label class="form-label" for="id-tel">Téléphone</label><div class="input-wrapper"><input type="text" id="id-tel" data-calc="ident" /></div></div>
+          </div></div></div>
+        </div>
+
+        <div class="devis-inputs">
+          <div class="form-group"><label class="form-label" for="dev-client">Client<span class="hint">société ou particulier</span></label><div class="input-wrapper"><input type="text" id="dev-client" placeholder="Ex : Boulangerie Martin" data-calc="devis" /></div></div>
+          <div class="form-group"><label class="form-label" for="dev-client-adresse">Adresse du client</label><div class="input-wrapper"><input type="text" id="dev-client-adresse" placeholder="Ex : 12 rue Serpenoise, 57000 Metz" data-calc="devis" /></div></div>
+          <div class="form-group"><label class="form-label" for="dev-projet">Intitulé du projet</label><div class="input-wrapper"><input type="text" id="dev-projet" placeholder="Ex : Film de marque 2 min" data-calc="devis" /></div></div>
+          <div class="form-group"><label class="form-label" for="dev-date-presta">Date / lieu de la prestation</label><div class="input-wrapper"><input type="text" id="dev-date-presta" placeholder="Ex : 14 mars 2026, Metz" data-calc="devis" /></div></div>
+          <div class="form-group full"><label class="form-label" for="dev-livrables">Livrables<span class="hint">formats, durées, nombre de photos, allers-retours inclus</span></label><div class="input-wrapper"><textarea class="ta" id="dev-livrables" placeholder="Ex : 1 film 16:9 de 2 min + 3 déclinaisons 9:16 de 30 s · 2 allers-retours de modifications inclus" data-calc="devis"></textarea></div></div>
+          <div class="form-group full"><label class="form-label" for="dev-droits">Droits cédés<span class="hint">supports, durée, territoire</span></label><div class="input-wrapper"><input type="text" id="dev-droits" value="Web et réseaux sociaux du client, 5 ans, monde" data-calc="devis" /></div></div>
+          <div class="form-group"><label class="form-label" for="dev-delai">Délai de livraison</label><div class="input-wrapper"><input type="text" id="dev-delai" value="10 jours ouvrés après le tournage" data-calc="devis" /></div></div>
+          <div class="form-group"><label class="form-label" for="dev-validite">Validité du devis</label><div class="input-wrapper"><input type="number" id="dev-validite" value="30" min="1" step="1" data-calc="devis" /><span class="input-suffix">jours</span></div></div>
+          <div class="form-group"><label class="form-label" for="dev-acompte">Acompte à la signature</label><div class="input-wrapper"><select id="dev-acompte" data-calc="devis">
+            <option value="30" selected>30 %</option><option value="40">40 %</option><option value="50">50 %</option><option value="0">Aucun acompte</option>
+          </select></div></div>
+          <div class="form-group"><label class="form-label" for="dev-reglement">Paiement du solde</label><div class="input-wrapper"><select id="dev-reglement" data-calc="devis">
+            <option value="0">À réception de facture</option><option value="15" selected>15 jours</option><option value="30">30 jours</option><option value="45">45 jours fin de mois</option>
+          </select></div></div>
+          <div class="form-group"><label class="form-label" for="dev-tva">Régime TVA</label><div class="input-wrapper"><select id="dev-tva" data-calc="devis">
+            <option value="0" selected>Franchise en base (art. 293 B du CGI)</option>
+            <option value="20">TVA 20 %</option>
+            <option value="10">TVA 10 %</option>
+            <option value="5.5">TVA 5,5 %</option>
+            <option value="autoliq">Client pro UE (Luxembourg…) : autoliquidation</option>
+            <option value="custom">Taux personnalisé</option>
+          </select></div></div>
+          <div class="form-group" id="dev-tva-custom-group" style="display:none"><label class="form-label" for="dev-tva-custom">Taux personnalisé</label><div class="input-wrapper"><input type="number" id="dev-tva-custom" value="0" min="0" max="100" step="0.1" data-calc="devis" /><span class="input-suffix">%</span></div></div>
+          <div class="form-group" id="dev-client-tva-group" style="display:none"><label class="form-label" for="dev-client-tva">N° TVA du client</label><div class="input-wrapper"><input type="text" id="dev-client-tva" placeholder="LU..." data-calc="devis" /></div></div>
+          <div class="form-group"><label class="form-label" for="dev-type-client">Type de client</label><div class="input-wrapper"><select id="dev-type-client" data-calc="devis">
+            <option value="pro" selected>Professionnel</option><option value="part">Particulier</option>
+          </select></div></div>
+          <div class="form-group full">
+            <label class="check-row"><input type="checkbox" id="dev-show-hours" data-calc="devis" /> Afficher le nombre d'heures par ligne</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="devis-actions">
+        <button class="btn-action primary" id="btn-print"><svg><use href="#icon-print"/></svg> Imprimer / PDF</button>
+        <button class="btn-action" id="btn-copy"><svg><use href="#icon-copy"/></svg> Copier le texte</button>
+        <button class="btn-action" id="btn-share" style="display:none"><svg><use href="#icon-upload"/></svg> Partager</button>
+        <button class="btn-action" id="btn-save-devis"><svg><use href="#icon-save"/></svg> Enregistrer le devis</button>
+        <button class="btn-action" id="btn-new-devis"><svg><use href="#icon-refresh"/></svg> Nouveau devis</button>
+      </div>
+
+      <div class="devis-preview" id="devis-preview"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 5 : HISTORIQUE ============ -->
+  <div class="tab-content" data-content="historique" role="tabpanel">
+    <div class="devis-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Devis enregistrés</h2>
+          <p>Stockés dans ce navigateur. Changez le statut pour suivre votre chiffre d'affaires signé et exportez régulièrement une sauvegarde.</p>
+        </div>
+        <div id="devis-history-list" class="devis-history"></div>
+        <div class="reset-row" style="justify-content:flex-start;flex-wrap:wrap">
+          <button class="btn-action" id="btn-export"><svg><use href="#icon-download"/></svg> Exporter la sauvegarde (.json)</button>
+          <label class="btn-action" for="file-import" style="cursor:pointer"><svg><use href="#icon-upload"/></svg> Importer</label>
+          <input type="file" id="file-import" accept="application/json,.json" style="display:none" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 6 : DASHBOARD ============ -->
+  <div class="tab-content" data-content="dashboard" role="tabpanel">
+    <div class="devis-container">
+      <div class="card">
+        <div class="card-header"><h2>Tableau de bord <span id="dash-year"></span></h2><p>Seuls les devis signés comptent dans le chiffre d'affaires. Tous les montants sont HT.</p></div>
+        <div class="dashboard-grid" id="dashboard-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>Objectif annuel</h2><p>CA HT nécessaire, calculé dans l'onglet Coût de revient</p></div>
+        <div id="dashboard-objective"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>Devis récents</h2></div>
+        <div id="dashboard-recent" class="devis-history"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>Simulateur de tarifs photo/vidéo pour freelance à Metz, Grand Est. Données mises à jour en novembre 2026.</p>
+    <p>Sources : URSSAF / economie.gouv.fr (taux micro 2026, décret n° 2025-943), BOFiP (franchise de TVA), Mission Freelances (baromètre TJM vidéo-photo 2026), Malt (profils Metz et Grand Est), Codeur.com (TJM relevés en août 2026), Mariages.net et 1001salles (forfaits Moselle et Nancy), La Fabrique du Net (budgets vidéo 2026).</p>
+    <p>Tarifs indicatifs, à utiliser comme repères de négociation. Les taux de cotisations TNS et SASU sont des approximations : validez-les avec votre expert-comptable.</p>
+  </div>
+</footer>
+
+<div class="toast" id="save-toast" role="status" aria-live="polite"><svg><use href="#icon-check"/></svg><span>Profil sauvegardé</span></div>
+
+<div class="sticky-bar" id="sticky-bar">
+  <div class="sticky-price"><span class="sticky-label">Prix recommandé HT</span><span class="sticky-value" id="sticky-price-val">—</span></div>
+  <button class="btn-action primary sticky-cta" id="sticky-devis"><svg><use href="#icon-invoice"/></svg> Devis</button>
+</div>
+<script>
+'use strict';
+
+/* =========================================================
+   DONNÉES 2026
+   ========================================================= */
+
+// Statuts : micro = % du CA (taux URSSAF 2026 + formation pro) ; TNS/SASU = coût social ≈ k × revenu net
+const STATUTS = {
+  micro_bnc:    { type: 'micro', taux: 0.258, vl: false, nom: 'Micro BNC' },
+  micro_bnc_vl: { type: 'micro', taux: 0.278, vl: true,  nom: 'Micro BNC + VL' },
+  micro_bic:    { type: 'micro', taux: 0.215, vl: false, nom: 'Micro BIC artisan' },
+  micro_bic_vl: { type: 'micro', taux: 0.232, vl: true,  nom: 'Micro BIC + VL' },
+  ei:           { type: 'tns',   k: 0.45, nom: 'EI au réel' },
+  eurl:         { type: 'tns',   k: 0.45, nom: 'EURL (TNS)' },
+  sasu:         { type: 'sasu',  k: 0.80, nom: 'SASU' },
+};
+const PLAFOND_MICRO = 83600;       // plafond CA prestations de services 2026
+const SEUIL_TVA = 37500;           // franchise en base, services
+const SEUIL_TVA_MAJORE = 41250;
+
+// TJM (€/jour HT) : national = baromètres 2026 ; metz = estimation locale
+const MARKET_LEVELS = {
+  video: [
+    { level: 'Débutant', note: '0-2 ans, cadreur-monteur junior', nat: [300, 380], metz: [250, 350] },
+    { level: 'Confirmé', note: '2-5 ans, autonome tournage + montage', nat: [450, 620], metz: [380, 550] },
+    { level: 'Expert', note: 'réalisateur, spécialisé (industrie, luxe)', nat: [620, 1200], metz: [550, 900] },
+  ],
+  photo: [
+    { level: 'Débutant', note: 'premières missions', nat: [250, 350], metz: [200, 300] },
+    { level: 'Confirmé', note: 'portfolio solide, corporate', nat: [450, 700], metz: [350, 550] },
+    { level: 'Expert', note: 'spécialisé (mode, archi, pub)', nat: [700, 1500], metz: [600, 1000] },
+  ],
+};
+
+// Types de prestation : temps types + prix observés à Metz / Grand Est (HT, freelances)
+const PACKAGES = [
+  { id: 'portrait', cat: 'photo', name: 'Portrait pro / LinkedIn', desc: '1 personne, 3 à 5 photos retouchées', pre: 1, tour: 1.5, post: 1.5, km: 20, trajet: 0.5, annexes: 0, frais: 0, market: [120, 250] },
+  { id: 'portraits-equipe', cat: 'photo', name: "Portraits d'équipe", desc: '10 à 15 personnes sur site, fond homogène', pre: 2, tour: 4, post: 6, km: 30, trajet: 0.5, annexes: 0, frais: 0, market: [800, 1400] },
+  { id: 'event-photo', cat: 'photo', name: 'Événement ½ journée', desc: 'Séminaire, inauguration, 4 h sur place', pre: 1, tour: 4, post: 4, km: 30, trajet: 0.5, annexes: 0, frais: 0, market: [350, 650] },
+  { id: 'packshot', cat: 'photo', name: 'Packshot e-commerce', desc: '20 produits, fond blanc, détourage', pre: 1, tour: 4, post: 6, km: 0, trajet: 0, annexes: 0, frais: 50, market: [300, 600] },
+  { id: 'immo', cat: 'photo', name: 'Immobilier / hôtellerie', desc: '1 bien, 20 à 30 photos HDR', pre: 0.5, tour: 2, post: 2.5, km: 30, trajet: 0.5, annexes: 0, frais: 0, market: [150, 350] },
+  { id: 'mariage-photo', cat: 'photo', name: 'Mariage photo (journée)', desc: 'Des préparatifs à la soirée, galerie de plus de 400 photos', pre: 5, tour: 11, post: 22, km: 60, trajet: 1.5, annexes: 20, frais: 50, market: [900, 2200] },
+  { id: 'reel', cat: 'video', name: 'Vidéo réseaux sociaux', desc: '1 format court de 30 à 60 s, vertical', pre: 2, tour: 3, post: 5, km: 20, trajet: 0.5, annexes: 0, frais: 0, market: [400, 1200] },
+  { id: 'interview', cat: 'video', name: 'Interview / témoignage', desc: '2 à 3 min, 2 caméras, micro cravate', pre: 3, tour: 4, post: 10, km: 30, trajet: 0.5, annexes: 0, frais: 0, market: [900, 2000] },
+  { id: 'film-entreprise', cat: 'video', name: "Film d'entreprise", desc: '2 à 3 min, script, 1 jour de tournage, motion simple', pre: 8, tour: 9, post: 24, km: 40, trajet: 1, annexes: 0, frais: 150, market: [2000, 5000] },
+  { id: 'aftermovie', cat: 'video', name: 'Captation + aftermovie', desc: 'Événement de 1 jour, film de 2 min + teaser', pre: 3, tour: 9, post: 16, km: 40, trajet: 1, annexes: 0, frais: 0, market: [1200, 3000] },
+  { id: 'mariage-video', cat: 'video', name: 'Mariage vidéo', desc: 'Film de 6 à 10 min + teaser de 1 min', pre: 5, tour: 12, post: 32, km: 60, trajet: 1.5, annexes: 20, frais: 50, market: [900, 2500] },
+  { id: 'retainer', cat: 'video', name: 'Contenu mensuel (abonnement)', desc: '4 vidéos courtes par mois, 1 jour de tournage', pre: 4, tour: 8, post: 20, km: 20, trajet: 0.5, annexes: 0, frais: 0, market: [1200, 2500], unit: '/mois' },
+];
+
+const EXTRA_MARKET = [
+  { cat: 'video', name: 'Montage seul (rushes fournis)', price: '200-400 €/jour' },
+  { cat: 'video', name: 'Option drone (télépilote déclaré)', price: '+150-400 €' },
+];
+
+const ZONE_ADJUSTMENTS = { metz: 1.0, luxembourg: 1.20, paris: 1.15, national: 1.05 };
+
+/* =========================================================
+   UTILITAIRES
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const num = (id, def = 0) => { const v = parseFloat($(id).value); return Number.isFinite(v) ? v : def; };
+const fmt = (n) => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(Math.round(n || 0)) + ' €';
+const fmtH = (n) => (Math.round(n * 10) / 10).toString().replace('.', ',') + ' h';
+const rng = (r, unit = '') => `${new Intl.NumberFormat('fr-FR').format(r[0])}-${new Intl.NumberFormat('fr-FR').format(r[1])} €${unit}`;
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ICON = (id) => `<svg><use href="#icon-${id}"/></svg>`;
+
+/* =========================================================
+   STOCKAGE LOCAL
+   ========================================================= */
+const STORE_KEY = 'lryprod.v2';
+let store = { inputs: {}, theme: null, devis: [], counter: {}, currentDevisId: null, activePackage: null };
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) store = Object.assign(store, JSON.parse(raw));
+  } catch (e) { /* stockage indisponible : l'outil fonctionne quand même */ }
+  if (!Array.isArray(store.devis)) store.devis = [];
+}
+function persist() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {}
+}
+
+const DEFAULTS = {};
+function captureDefaults() {
+  document.querySelectorAll('[data-calc]').forEach((el) => {
+    DEFAULTS[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+}
+function collectInputs(filter) {
+  const out = {};
+  document.querySelectorAll('[data-calc]').forEach((el) => {
+    if (filter && !filter.includes(el.dataset.calc)) return;
+    out[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  return out;
+}
+function applyInputs(obj) {
+  Object.entries(obj || {}).forEach(([id, v]) => {
+    const el = $(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+  });
+}
+
+let saveTimer;
+function scheduleSave(toast) {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    store.inputs = collectInputs();
+    persist();
+    if (toast) showToast(toast);
+  }, 500);
+}
+
+function showToast(label) {
+  const t = $('save-toast');
+  t.querySelector('span').textContent = label;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* =========================================================
+   CALCULS
+   ========================================================= */
+function computeProfile(statutKey) {
+  const s = STATUTS[statutKey || $('statut').value];
+  const net = num('salaire-net');
+  const ir = Math.min(num('ir-pct'), 60) / 100;
+  const jours = Math.max(1, num('jours-facturables', 140));
+  const hJour = Math.max(1, num('heures-jour', 8));
+  const chargesFixes = num('assurance-pro') + num('compta') + num('autres-charges') + num('communication');
+  const equipement = num('amortissement') + num('logiciels') + num('formation');
+  const consommables = num('frais-variables') * jours;
+  const coutsPro = chargesFixes + equipement + consommables;
+
+  // Le versement libératoire inclut déjà l'impôt dans le taux
+  const netAvantIR = s.vl ? net : net / (1 - ir);
+  const provisionIR = netAvantIR - net;
+
+  let ca, cotisations;
+  if (s.type === 'micro') {
+    // En micro, les cotisations portent sur tout le CA, y compris la part qui paie vos frais
+    ca = (netAvantIR + coutsPro) / (1 - s.taux);
+    cotisations = ca * s.taux;
+  } else {
+    cotisations = netAvantIR * s.k;
+    ca = netAvantIR + cotisations + coutsPro;
+  }
+  const tjm = ca / jours;
+  return { s, statutKey, net, provisionIR, cotisations, chargesFixes, equipement, consommables, coutsPro, ca, jours, hJour, tjm, tjmH: tjm / hJour };
+}
+
+function projectParams() {
+  return {
+    marge: num('marge') / 100,
+    droits: num('droits-usage') / 100,
+    urgence: num('urgence', 1),
+    zone: ZONE_ADJUSTMENTS[$('zone').value] || 1,
+    zoneLabel: $('zone').selectedOptions[0].text,
+    majFrais: num('maj-frais') / 100,
+    eurKm: num('eur-km'),
+  };
+}
+
+function computeProject(P, h, prm) {
+  const tjmH = P.tjmH;
+  const heures = h.pre + h.tour + h.post + h.trajet;
+  const f = (1 + prm.marge) * prm.zone * prm.urgence;          // coefficient appliqué au temps vendu
+  const coutTemps = heures * tjmH;
+  const fraisKm = h.km * prm.eurKm;
+  const fraisTot = h.frais + fraisKm + h.annexes;               // frais réels
+  const fraisFact = fraisTot * (1 + prm.majFrais);              // frais refacturés
+  const tempsVendu = coutTemps * f;
+  const droits = tempsVendu * prm.droits;
+  const plancher = coutTemps + fraisTot;
+  const lignes = [
+    { key: 'pre', label: 'Préparation & pré-production', h: h.pre, montant: h.pre * tjmH * f },
+    { key: 'tour', label: 'Tournage / prise de vue', h: h.tour, montant: h.tour * tjmH * f },
+    { key: 'post', label: 'Post-production & livraison', h: h.post, montant: h.post * tjmH * f },
+    { key: 'dep', label: `Déplacement (${h.km} km A/R)`, h: h.trajet, montant: h.trajet * tjmH * f + (fraisKm + h.annexes) * (1 + prm.majFrais) },
+    { key: 'frais', label: 'Frais techniques & location', h: null, montant: h.frais * (1 + prm.majFrais) },
+    { key: 'droits', label: "Cession de droits d'exploitation", h: null, montant: droits },
+  ].filter((l) => l.montant > 0.5);
+  const reco = lignes.reduce((t, l) => t + Math.round(l.montant), 0); // = total du devis (lignes arrondies)
+  return { heures, f, coutTemps, fraisKm, fraisTot, fraisFact, tempsVendu, droits, plancher, reco, premium: reco * 1.25, lignes, tjmVendu: tjmH * f };
+}
+
+function currentHours() {
+  return {
+    pre: num('heures-preprod'), tour: num('heures-tournage'), post: num('heures-postprod'),
+    trajet: num('heures-trajet'), km: num('km'), annexes: num('frais-annexes'), frais: num('frais-projet'),
+  };
+}
+
+function metzPosition(tjm) {
+  const v = MARKET_LEVELS.video;
+  if (tjm < v[0].metz[0]) return { t: 'Sous le marché débutant local', b: 'badge-danger' };
+  if (tjm < v[1].metz[0]) return { t: 'Niveau débutant à Metz', b: 'badge-warning' };
+  if (tjm <= v[1].metz[1]) return { t: 'Niveau confirmé à Metz : cohérent', b: 'badge-success' };
+  if (tjm <= v[2].metz[1]) return { t: 'Niveau expert à Metz : à justifier', b: 'badge-info' };
+  return { t: 'Au-dessus du marché local : niche ou Luxembourg', b: 'badge-warning' };
+}
+
+/* =========================================================
+   RENDUS
+   ========================================================= */
+let P, J, PRM;
+
+function renderCout() {
+  $('jours-val').textContent = P.jours + ' j';
+  $('heures-jour-val').textContent = fmtH(P.hJour);
+  $('tjm-plancher').textContent = fmt(P.tjm) + ' /j';
+  $('tjm-plancher-sub').textContent = `${fmt(P.tjmH)}/heure · ${P.jours} jours facturés · CA HT nécessaire : ${fmt(P.ca)}`;
+
+  const items = [
+    { label: 'Revenu net cible', value: P.net },
+    ...(P.provisionIR > 0 ? [{ label: 'Provision impôt sur le revenu', value: P.provisionIR }] : []),
+    { label: `Cotisations sociales (${P.s.nom}${P.s.vl ? ', IR inclus' : ''})`, value: P.cotisations },
+    { label: 'Charges fixes', value: P.chargesFixes },
+    { label: 'Équipement, logiciels & formation', value: P.equipement },
+    { label: `Consommables (${P.jours} j × ${num('frais-variables')} €)`, value: P.consommables },
+    { label: 'CA HT annuel nécessaire', value: P.ca, accent: true },
+    { label: 'Soit par mois (sur 12 mois)', value: P.ca / 12, accent: true },
+  ];
+  $('cout-breakdown').innerHTML = items.map((i) => `
+    <div class="result-item"><span class="label">${i.label}</span><span class="value${i.accent ? ' accent' : ''}">${fmt(i.value)}</span></div>`).join('');
+
+  // Comparatif des statuts à objectif identique
+  const comp = ['micro_bnc', 'micro_bic', 'ei', 'sasu'].map((k) => ({ k, p: computeProfile(k) }));
+  const best = Math.min(...comp.map((c) => c.p.tjm));
+
+  const alerts = [];
+  if (P.s.type === 'micro' && P.ca > PLAFOND_MICRO) {
+    alerts.push(['danger', 'alert', `Le CA nécessaire (${fmt(P.ca)}) dépasse le plafond de la micro-entreprise (${fmt(PLAFOND_MICRO)}). Passez au réel (EI, EURL ou SASU) ou revoyez l'objectif.`]);
+  }
+  if (P.ca > SEUIL_TVA) {
+    alerts.push(['warn', 'alert', `Au-delà de ${fmt(SEUIL_TVA)} HT de CA (seuil majoré : ${fmt(SEUIL_TVA_MAJORE)}), la franchise de TVA tombe : vos clients particuliers paieront 20 % de plus. Pour les clients pros, c'est neutre.`]);
+  }
+  if (P.jours > 170) {
+    alerts.push(['warn', 'alert', `${P.jours} jours facturés par an, c'est optimiste pour un indépendant image : prospection, admin, devis et matériel prennent 30 à 40 % du temps.`]);
+  }
+  if (P.s.vl) {
+    alerts.push(['info', 'info', "Le versement libératoire n'est possible que si le revenu fiscal de référence de N-2 reste sous environ 29 000 € par part. Le champ Provision IR est ignoré."]);
+  }
+  alerts.push(['info', 'info', 'À objectif net identique, TJM plancher par statut : ' + comp.map((c) =>
+    `<strong>${c.p.s.nom}</strong> ${fmt(c.p.tjm)}${Math.abs(c.p.tjm - best) < 1 ? ' (le plus bas)' : ''}`).join(' · ') +
+    '. La SASU coûte plus cher en cotisations, mais elle protège mieux (retraite, prévoyance) et permet de verser des dividendes.']);
+  $('cout-alerts').innerHTML = alerts.map(([c, i, t]) => `<div class="alert ${c}">${ICON(i)}<span>${t}</span></div>`).join('');
+
+  $('formule-note').textContent = P.s.type === 'micro'
+    ? "Formule (micro) : CA = (revenu net + provision IR + toutes les charges pro) ÷ (1 − taux URSSAF). En micro, vous ne déduisez aucune charge : les cotisations portent aussi sur l'argent qui paie votre matériel. TJM = CA ÷ jours facturés."
+    : 'Formule (réel) : CA = revenu net + provision IR + cotisations (environ ' + Math.round(P.s.k * 100) + " % du net) + charges pro. TJM = CA ÷ jours facturés. Ce taux est une approximation : faites-le confirmer par votre comptable.";
+}
+
+function renderMarche() {
+  const tjmConseille = P.tjm * (1 + PRM.marge);
+  $('marche-plancher').textContent = fmt(P.tjm) + ' /j';
+  $('marche-conseille').textContent = fmt(tjmConseille) + ' /j';
+  const p1 = metzPosition(P.tjm), p2 = metzPosition(tjmConseille);
+  $('marche-plancher-pos').innerHTML = `<span class="badge ${p1.b}">${p1.t}</span>`;
+  $('marche-conseille-pos').innerHTML = `<span class="badge ${p2.b}">${p2.t}</span>`;
+
+  ['video', 'photo'].forEach((cat) => {
+    document.querySelector(`#table-${cat} tbody`).innerHTML = MARKET_LEVELS[cat].map((l) => {
+      let b;
+      if (tjmConseille < l.metz[0]) b = '<span class="badge badge-neutral">En dessous</span>';
+      else if (tjmConseille <= l.metz[1]) b = '<span class="badge badge-success">Vous êtes ici</span>';
+      else b = '<span class="badge badge-neutral">Au-dessus</span>';
+      return `<tr>
+        <td class="level">${l.level}<br><span style="font-size:0.6875rem;color:var(--color-text-faint)">${l.note}</span></td>
+        <td class="range">${rng(l.nat)}</td>
+        <td class="metz">${rng(l.metz)}</td>
+        <td class="compare-cell">${b}</td></tr>`;
+    }).join('');
+  });
+}
+
+function renderSpecialites() {
+  const list = [...PACKAGES.map((p) => ({ cat: p.cat, name: p.name, desc: p.desc, price: rng(p.market, p.unit || '') })), ...EXTRA_MARKET];
+  $('specialites-grid').innerHTML = list.map((s) => `
+    <div class="result-item" style="flex-direction:column;align-items:flex-start;gap:0.25rem">
+      <div style="display:flex;align-items:center;gap:0.375rem;width:100%">
+        <svg style="width:14px;height:14px;color:var(--color-primary);flex-shrink:0"><use href="#icon-${s.cat === 'photo' ? 'camera' : 'video'}"/></svg>
+        <span class="label" style="font-weight:500;color:var(--color-text)">${s.name}</span>
+        <span class="value accent" style="font-size:0.8125rem;margin-left:auto">${s.price}</span>
+      </div>
+      ${s.desc ? `<span class="text-sm text-faint">${s.desc}</span>` : ''}
+    </div>`).join('');
+}
+
+function renderPresets() {
+  const chip = (p) => `<button class="preset-chip${store.activePackage === p.id ? ' active' : ''}" data-preset="${p.id}">${ICON(p.cat === 'photo' ? 'camera' : 'video')} ${p.name}</button>`;
+  $('presets').innerHTML =
+    '<span class="preset-group-label">Photo</span>' + PACKAGES.filter((p) => p.cat === 'photo').map(chip).join('') +
+    '<span class="preset-group-label">Vidéo</span>' + PACKAGES.filter((p) => p.cat === 'video').map(chip).join('');
+}
+
+function marketBadge(price, m) {
+  if (price < m[0]) return { b: 'badge-info', t: 'Sous le marché', c: 'info' };
+  if (price <= m[1]) return { b: 'badge-success', t: 'Dans le marché', c: 'ok' };
+  return { b: 'badge-warning', t: 'Au-dessus', c: 'warn' };
+}
+
+function renderProjet() {
+  const h = currentHours();
+  $('preprod-val').textContent = fmtH(h.pre);
+  $('tournage-val').textContent = fmtH(h.tour);
+  $('postprod-val').textContent = fmtH(h.post);
+  $('marge-val').textContent = num('marge') + '%';
+  $('droits-val').textContent = num('droits-usage') + '%';
+  $('maj-frais-val').textContent = num('maj-frais') + '%';
+
+  $('prix-recommande').textContent = fmt(J.reco);
+  $('prix-detail').textContent = `${fmtH(J.heures)} de travail · temps vendu ${fmt(J.tjmVendu)}/h (${fmt(J.tjmVendu * P.hJour)}/j)`;
+  $('sticky-price-val').textContent = fmt(J.reco);
+
+  // Repère marché du type de prestation
+  const pkg = PACKAGES.find((p) => p.id === store.activePackage);
+  if (pkg) {
+    const mb = marketBadge(J.reco, pkg.market);
+    const msg = mb.c === 'ok' ? 'Votre prix est cohérent avec le marché local.'
+      : mb.c === 'info' ? 'Vous êtes sous les prix pratiqués localement : vous pouvez monter votre tarif sans perdre en compétitivité.'
+      : "Votre prix dépasse les prix locaux. Justifiez-le (portfolio, spécialité, qualité) ou réduisez le temps passé (post-prod, livrables). C'est souvent le signe d'un temps de post-production sous-estimé dans les tarifs du marché.";
+    $('projet-market').innerHTML = `<div class="alert ${mb.c}">${ICON('market')}<span><strong>${esc(pkg.name)}</strong> : marché Metz ${rng(pkg.market, pkg.unit || '')}. ${msg}</span></div>`;
+  } else {
+    $('projet-market').innerHTML = '';
+  }
+
+  $('projet-niveaux').innerHTML = [
+    { label: 'Plancher (rentabilité nulle)', value: J.plancher },
+    { label: 'Recommandé', value: J.reco, accent: true },
+    { label: 'Premium (offre haute, +25 %)', value: J.premium },
+    { label: 'Gain au-delà du plancher', value: J.reco - J.plancher },
+  ].map((i) => `<div class="result-item"><span class="label">${i.label}</span><span class="value${i.accent ? ' accent' : ''}">${fmt(i.value)}</span></div>`).join('');
+
+  $('projet-breakdown').innerHTML = [
+    { label: `Coût du temps (${fmtH(J.heures)} × ${fmt(P.tjmH)})`, value: J.coutTemps },
+    { label: 'Frais réels (km, annexes, technique)', value: J.fraisTot },
+    { label: `Marge (${num('marge')} %)`, value: J.coutTemps * PRM.marge, accent: true },
+    { label: 'Zone + urgence', value: J.tempsVendu - J.coutTemps * (1 + PRM.marge), accent: true },
+    { label: 'Majoration des frais', value: J.fraisFact - J.fraisTot },
+    { label: 'Droits d\'exploitation', value: J.droits },
+  ].map((i) => `<div class="result-item"><span class="label">${i.label}</span><span class="value${i.accent ? ' accent' : ''}">${fmt(i.value)}</span></div>`).join('');
+
+  renderBudget();
+  renderGrille();
+}
+
+function renderBudget() {
+  const B = parseFloat($('budget-client').value);
+  const out = $('budget-result');
+  if (!Number.isFinite(B) || B <= 0) { out.innerHTML = ''; return; }
+  const h = currentHours();
+  const tauxEffectif = (B - J.fraisTot) / Math.max(J.heures, 0.1);
+  const margeReelle = (B - J.plancher) / Math.max(J.plancher, 1);
+  const hMax = (B - J.fraisFact) / (P.tjmH * J.f * (1 + PRM.droits));
+  const postMax = hMax - (h.pre + h.tour + h.trajet);
+  let cls, txt;
+  if (B < J.plancher) {
+    cls = 'danger';
+    txt = `Vous perdriez <strong>${fmt(J.plancher - B)}</strong> : taux effectif de ${fmt(tauxEffectif)}/h contre ${fmt(P.tjmH)}/h au plancher.`;
+  } else if (B < J.reco) {
+    cls = 'warn';
+    txt = `Rentable, mais sous votre prix : marge réelle de ${Math.round(margeReelle * 100)} % (taux effectif : ${fmt(tauxEffectif)}/h).`;
+  } else {
+    cls = 'ok';
+    txt = `Budget suffisant : marge réelle de ${Math.round(margeReelle * 100)} %, taux effectif de ${fmt(tauxEffectif)}/h. Vous pouvez proposer des options en plus.`;
+  }
+  if (B < J.reco) {
+    txt += postMax > 0
+      ? ` Pour tenir ce budget à votre tarif, limitez la post-production à <strong>${fmtH(Math.floor(postMax * 2) / 2)}</strong> (au lieu de ${fmtH(h.post)}) en réduisant les livrables ou les allers-retours.`
+      : ' Ce budget ne couvre même pas la préparation et le tournage à votre tarif : réduisez le périmètre ou déclinez.';
+  }
+  out.innerHTML = `<div class="alert ${cls}">${ICON(cls === 'ok' ? 'check' : 'alert')}<span>${txt}</span></div>`;
+}
+
+function renderGrille() {
+  $('grille-grid').innerHTML = PACKAGES.map((p) => {
+    const r = computeProject(P, p, PRM);
+    const mb = marketBadge(r.reco, p.market);
+    return `
+      <div class="grille-card" data-preset="${p.id}" role="button" tabindex="0" style="cursor:pointer">
+        <div class="type">${ICON(p.cat === 'photo' ? 'camera' : 'video').replace('<svg>', '<svg style="width:12px;height:12px;display:inline;vertical-align:-1px;margin-right:4px">')}${p.name}</div>
+        <div class="desc">${p.desc} · ${fmtH(r.heures)}</div>
+        <div class="prices">
+          <div class="price-row plancher"><span class="label">Plancher</span><span class="amount">${fmt(r.plancher)}</span></div>
+          <div class="price-row recommande"><span class="label">Recommandé</span><span class="amount">${fmt(r.reco)}${p.unit || ''}</span></div>
+          <div class="price-row premium"><span class="label">Premium</span><span class="amount">${fmt(r.premium)}</span></div>
+        </div>
+        <div class="market"><span>Metz : ${rng(p.market)}</span><span class="badge ${mb.b}">${mb.t}</span></div>
+      </div>`;
+  }).join('');
+}
+
+/* =========================================================
+   DEVIS
+   ========================================================= */
+function nextNumero() {
+  const y = new Date().getFullYear();
+  const n = (store.counter[y] || 0) + 1;
+  return `DEV-${y}-${String(n).padStart(3, '0')}`;
+}
+function currentRecord() { return store.devis.find((d) => d.id === store.currentDevisId) || null; }
+
+function devisModel() {
+  const rec = currentRecord();
+  const g = (id) => $(id).value.trim();
+  const tvaSel = $('dev-tva').value;
+  const tvaRate = tvaSel === 'custom' ? num('dev-tva-custom') / 100 : (tvaSel === '0' || tvaSel === 'autoliq') ? 0 : parseFloat(tvaSel) / 100;
+  const totalHT = J.lignes.reduce((s, l) => s + Math.round(l.montant), 0); // lignes arrondies → total cohérent
+  const tva = totalHT * tvaRate;
+  const ttc = totalHT + tva;
+  const acompte = parseInt($('dev-acompte').value, 10) || 0;
+  const date = rec ? new Date(rec.date) : new Date();
+  const validite = Math.max(1, num('dev-validite', 30));
+  const fin = new Date(date.getTime() + validite * 86400000);
+  const dfmt = (d) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  return {
+    numero: rec ? rec.numero : nextNumero(), date: dfmt(date), fin: dfmt(fin), validite,
+    ident: { nom: g('id-nom') || 'LRY PROD', titulaire: g('id-titulaire'), siret: g('id-siret'), tvaintra: g('id-tvaintra'), adresse: g('id-adresse'), email: g('id-email'), tel: g('id-tel') },
+    client: g('dev-client'), clientAdresse: g('dev-client-adresse'), clientTva: g('dev-client-tva'),
+    projet: g('dev-projet'), datePresta: g('dev-date-presta'), livrables: g('dev-livrables'), droits: g('dev-droits'), delai: g('dev-delai'),
+    pro: $('dev-type-client').value === 'pro', showHours: $('dev-show-hours').checked,
+    tvaSel, tvaRate, totalHT, tva, ttc, totalDu: ttc, acompte, acompteMontant: ttc * acompte / 100,
+    reglement: $('dev-reglement').value,
+    tauxSup: J.tjmVendu,
+    lignes: J.lignes.map((l) => ({ label: l.label, h: l.h, montant: Math.round(l.montant) })),
+    stale: rec && Math.abs(rec.totalHT - totalHT) > 1 ? rec.totalHT : null,
+  };
+}
+
+function tvaMention(d) {
+  if (d.tvaSel === '0') return 'TVA non applicable, art. 293 B du CGI';
+  if (d.tvaSel === 'autoliq') return 'Autoliquidation : TVA due par le preneur (art. 283-2 du CGI, art. 196 de la directive 2006/112/CE)';
+  return `TVA ${String(Math.round(d.tvaRate * 1000) / 10).replace('.', ',')} %`;
+}
+function paiementTexte(d) {
+  const sol = d.reglement === '0' ? 'à réception de la facture' : d.reglement === '45' ? 'à 45 jours fin de mois' : `à ${d.reglement} jours date de facture`;
+  return (d.acompte > 0 ? `Acompte de ${d.acompte} % (${fmt(d.acompteMontant)}) à la signature du devis, qui confirme la réservation de la date. Solde ` : 'Paiement ') + sol + '. Virement bancaire.';
+}
+function conditions(d) {
+  const c = [
+    ['Paiement', paiementTexte(d)],
+    ['Retard de paiement', d.pro
+      ? "Pénalités au taux de 3 fois le taux d'intérêt légal, plus une indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 et D441-5 du Code de commerce). Pas d'escompte pour paiement anticipé."
+      : "Pénalités au taux d'intérêt légal en vigueur."],
+    ["Droits d'auteur", `Cession des droits d'exploitation : ${d.droits || 'supports convenus'}. Toute autre exploitation fera l'objet d'un avenant. La cession prend effet au paiement intégral. Le prestataire peut utiliser les images pour sa promotion, sauf refus écrit du client.`],
+    ['Modifications', `Les allers-retours prévus sont inclus. Au-delà, ils sont facturés ${fmt(d.tauxSup)} HT de l'heure.`],
+    ['Annulation', "En cas d'annulation par le client moins de 7 jours avant la prestation, l'acompte reste acquis. Report possible une fois, sans frais, selon les disponibilités."],
+    ['Validité', `${d.validite} jours, jusqu'au ${d.fin}.`],
+  ];
+  return c;
+}
+
+function renderDevis() {
+  const d = devisModel();
+  const id = d.ident;
+  const identLines = [id.titulaire, id.adresse, id.siret && `SIRET ${id.siret}`, id.tvaintra && `TVA ${id.tvaintra}`, [id.email, id.tel].filter(Boolean).join(' · ')].filter(Boolean);
+  const missing = [!id.siret && 'SIRET', !id.adresse && 'votre adresse', !d.client && 'client', !d.livrables && 'livrables'].filter(Boolean);
+  const rows = d.lignes.map((l) => `<tr><td>${esc(l.label)}</td>${d.showHours ? `<td style="text-align:right">${l.h ? fmtH(l.h) : '—'}</td>` : ''}<td style="text-align:right">${fmt(l.montant)}</td></tr>`).join('');
+
+  $('devis-preview').innerHTML = `
+    ${missing.length ? `<div style="background:#fff4e0;border:1px solid #f0c27a;color:#7a4b00;border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;margin-bottom:1rem" class="no-print">Infos à compléter : ${missing.join(', ')}</div>` : ''}
+    ${d.stale ? `<div style="background:#e8f1f7;border:1px solid #9cc3dc;color:#1d4a66;border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;margin-bottom:1rem">Prix recalculé avec votre profil actuel (montant enregistré : ${fmt(d.stale)} HT). Enregistrez pour le mettre à jour.</div>` : ''}
+    <div class="devis-header">
+      <div>
+        <div class="devis-artist">${esc(id.nom)}</div>
+        <div class="devis-meta pre">${identLines.map(esc).join('\n') || 'Photographe / vidéaste · Metz'}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:1.25rem;font-weight:700">DEVIS</div>
+        <div class="devis-meta"><strong>${d.numero}</strong></div>
+        <div class="devis-meta">Émis le ${d.date}</div>
+        <div class="devis-meta">Valable jusqu'au ${d.fin}</div>
+      </div>
+    </div>
+    <div class="devis-parties">
+      <div>
+        <div class="devis-label">Client</div>
+        <div class="devis-value">${esc(d.client) || 'À renseigner'}</div>
+        <div class="devis-meta">${esc(d.clientAdresse)}${d.tvaSel === 'autoliq' && d.clientTva ? '<br>TVA ' + esc(d.clientTva) : ''}</div>
+      </div>
+      <div>
+        <div class="devis-label">Projet</div>
+        <div class="devis-value">${esc(d.projet) || 'À renseigner'}</div>
+        <div class="devis-meta">${esc(d.datePresta)}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem">
+      <div class="devis-label">Livrables</div>
+      <div class="devis-value pre" style="font-weight:400">${esc(d.livrables) || 'À renseigner'}</div>
+      <div class="devis-meta" style="margin-top:0.25rem">Délai de livraison : ${esc(d.delai)}</div>
+    </div>
+    <table>
+      <thead><tr><th>Désignation</th>${d.showHours ? '<th style="text-align:right">Temps</th>' : ''}<th style="text-align:right">Montant HT</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="devis-total"><span>Total HT</span><span>${fmt(d.totalHT)}</span></div>
+    <div style="display:flex;justify-content:space-between;gap:1rem;font-size:0.75rem;color:#555;padding:0.25rem 0">
+      <span>${tvaMention(d)}</span><span>${d.tvaRate > 0 ? fmt(d.tva) : ''}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.95rem;font-weight:700;padding:0.375rem 0;border-bottom:1px solid #ddd">
+      <span>Net à payer${d.tvaRate > 0 ? ' TTC' : ''}</span><span>${fmt(d.totalDu)}</span>
+    </div>
+    ${d.acompte > 0 ? `
+      <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#8a6200;padding:0.25rem 0"><span>Acompte à la signature (${d.acompte} %)</span><span>${fmt(d.acompteMontant)}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#555"><span>Solde</span><span>${fmt(d.totalDu - d.acompteMontant)}</span></div>` : ''}
+    <div class="devis-conditions">
+      ${conditions(d).map(([t, v]) => `<p><strong>${t} :</strong> ${esc(v)}</p>`).join('')}
+    </div>
+    <div class="devis-sign">
+      <div><strong>Le prestataire</strong><br>${esc(id.titulaire || id.nom)}</div>
+      <div><strong>Le client</strong><br>Mention « Bon pour accord », date et signature</div>
+    </div>`;
+}
+
+function devisPlainText() {
+  const d = devisModel();
+  const L = [];
+  L.push(`DEVIS ${d.numero}`, `Émis le ${d.date}, valable jusqu'au ${d.fin}`, '');
+  L.push(d.ident.nom, ...[d.ident.titulaire, d.ident.adresse, d.ident.siret && 'SIRET ' + d.ident.siret, d.ident.tvaintra && 'TVA ' + d.ident.tvaintra, d.ident.email, d.ident.tel].filter(Boolean), '');
+  L.push(`Client : ${d.client || 'À renseigner'}`); if (d.clientAdresse) L.push(d.clientAdresse);
+  if (d.tvaSel === 'autoliq' && d.clientTva) L.push('TVA client : ' + d.clientTva);
+  L.push(`Projet : ${d.projet || 'À renseigner'}`); if (d.datePresta) L.push(`Date / lieu : ${d.datePresta}`);
+  L.push(`Livrables : ${d.livrables || 'À renseigner'}`, `Délai de livraison : ${d.delai}`, '', '--- PRESTATIONS ---');
+  d.lignes.forEach((l) => L.push(`${l.label}${d.showHours && l.h ? ' (' + fmtH(l.h) + ')' : ''} : ${fmt(l.montant)} HT`));
+  L.push('', `Total HT : ${fmt(d.totalHT)}`, tvaMention(d) + (d.tvaRate > 0 ? ' : ' + fmt(d.tva) : ''), `Net à payer : ${fmt(d.totalDu)}`);
+  if (d.acompte > 0) L.push(`Acompte (${d.acompte} %) : ${fmt(d.acompteMontant)} · Solde : ${fmt(d.totalDu - d.acompteMontant)}`);
+  L.push('', '--- CONDITIONS ---', ...conditions(d).map(([t, v]) => `${t} : ${v}`), '', 'Bon pour accord (date et signature) :');
+  return L.join('\n');
+}
+
+function updateTvaFields() {
+  const v = $('dev-tva').value;
+  $('dev-tva-custom-group').style.display = v === 'custom' ? '' : 'none';
+  $('dev-client-tva-group').style.display = v === 'autoliq' ? '' : 'none';
+}
+
+function saveDevis() {
+  const d = devisModel();
+  const snapshot = collectInputs(['projet', 'devis']);
+  let rec = currentRecord();
+  if (rec) {
+    Object.assign(rec, { client: d.client, projet: d.projet, totalHT: d.totalHT, totalDu: d.totalDu, snapshot, activePackage: store.activePackage, updated: new Date().toISOString() });
+    showToast(`Devis ${rec.numero} mis à jour`);
+  } else {
+    const y = new Date().getFullYear();
+    store.counter[y] = (store.counter[y] || 0) + 1;
+    rec = { id: Date.now().toString(36), numero: d.numero, date: new Date().toISOString(), client: d.client, projet: d.projet, totalHT: d.totalHT, totalDu: d.totalDu, status: 'brouillon', snapshot, activePackage: store.activePackage };
+    store.devis.unshift(rec);
+    store.currentDevisId = rec.id;
+    showToast(`Devis ${rec.numero} enregistré`);
+  }
+  persist();
+  renderDevis();
+  renderHistory();
+}
+
+function newDevis() {
+  store.currentDevisId = null;
+  ['dev-client', 'dev-client-adresse', 'dev-client-tva', 'dev-projet', 'dev-date-presta', 'dev-livrables'].forEach((id) => { $(id).value = ''; });
+  persist();
+  renderDevis();
+  showToast('Nouveau devis');
+}
+
+function loadDevis(id) {
+  const rec = store.devis.find((d) => d.id === id);
+  if (!rec) return;
+  applyInputs(rec.snapshot);
+  store.currentDevisId = rec.id;
+  store.activePackage = rec.activePackage || null;
+  updateTvaFields();
+  recalc();
+  renderPresets();
+  activateTab('devis');
+  showToast(`Devis ${rec.numero} chargé`);
+}
+
+const STATUS = { brouillon: 'Brouillon', envoye: 'Envoyé', signe: 'Signé', refuse: 'Refusé' };
+function historyItem(d, withActions) {
+  return `
+    <div class="devis-history-item">
+      <div class="devis-history-info">
+        <div class="devis-history-title">${esc(d.projet || d.client || 'Devis sans nom')}</div>
+        <div class="devis-history-meta">${d.numero} · ${esc(d.client || '—')} · ${fmt(d.totalHT)} HT · ${new Date(d.date).toLocaleDateString('fr-FR')}</div>
+      </div>
+      <div class="devis-history-actions">
+        ${withActions ? `
+        <select class="status-select" data-status="${d.id}" aria-label="Statut">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}"${d.status === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
+        <button class="icon-btn" data-load="${d.id}" title="Ouvrir">${ICON('copy')}</button>
+        <button class="icon-btn danger" data-del="${d.id}" title="Supprimer">${ICON('trash')}</button>`
+        : `<span class="badge ${d.status === 'signe' ? 'badge-success' : d.status === 'refuse' ? 'badge-danger' : d.status === 'envoye' ? 'badge-info' : 'badge-neutral'}">${STATUS[d.status] || ''}</span>`}
+      </div>
+    </div>`;
+}
+function renderHistory() {
+  $('devis-history-list').innerHTML = store.devis.length
+    ? store.devis.map((d) => historyItem(d, true)).join('')
+    : '<div class="empty-state">Aucun devis enregistré. Créez un devis puis cliquez sur « Enregistrer le devis ».</div>';
+}
+
+function renderDashboard() {
+  const y = new Date().getFullYear();
+  $('dash-year').textContent = y;
+  const list = store.devis.filter((d) => new Date(d.date).getFullYear() === y);
+  const sum = (st) => list.filter((d) => d.status === st).reduce((s, d) => s + (d.totalHT || 0), 0);
+  const count = (st) => list.filter((d) => d.status === st).length;
+  const signe = sum('signe'), envoye = sum('envoye');
+  const nbS = count('signe'), nbR = count('refuse');
+  const conv = nbS + nbR > 0 ? nbS / (nbS + nbR) : null;
+  const objectif = P.ca;
+  const reste = Math.max(0, objectif - signe);
+  const pct = objectif > 0 ? Math.min(100, (signe / objectif) * 100) : 0;
+  const moisRestants = 12 - new Date().getMonth();
+  const panier = nbS ? signe / nbS : 0;
+
+  $('dashboard-grid').innerHTML = `
+    <div class="dash-card"><div class="dash-label">CA signé</div><div class="dash-value accent">${fmt(signe)}</div><div class="dash-sub">${nbS} devis signé${nbS > 1 ? 's' : ''}</div></div>
+    <div class="dash-card"><div class="dash-label">En attente</div><div class="dash-value">${fmt(envoye)}</div><div class="dash-sub">${count('envoye')} devis envoyé${count('envoye') > 1 ? 's' : ''}</div></div>
+    <div class="dash-card"><div class="dash-label">Transformation</div><div class="dash-value">${conv === null ? '—' : Math.round(conv * 100) + ' %'}</div><div class="dash-sub">signés ÷ (signés + refusés)</div></div>
+    <div class="dash-card"><div class="dash-label">Panier moyen signé</div><div class="dash-value">${fmt(panier)}</div><div class="dash-sub">HT</div></div>`;
+
+  $('dashboard-objective').innerHTML = `
+    <div class="result-item" style="padding:0.5rem 0;background:none;border:none"><span class="label">Progression : ${fmt(signe)} sur ${fmt(objectif)}</span><span class="value accent">${Math.round(pct)} %</span></div>
+    <div class="progress-bar"><div class="progress-fill ${pct >= 100 ? 'success' : pct < 30 ? 'danger' : ''}" style="width:${pct}%"></div></div>
+    <div class="result-grid" style="margin-top:1rem">
+      <div class="result-item"><span class="label">Reste à signer</span><span class="value">${fmt(reste)}</span></div>
+      <div class="result-item"><span class="label">Par mois restant (${moisRestants})</span><span class="value">${fmt(reste / moisRestants)}</span></div>
+      <div class="result-item"><span class="label">Jours à facturer au TJM plancher</span><span class="value">${Math.ceil(reste / Math.max(P.tjm, 1))} j</span></div>
+      <div class="result-item"><span class="label">Si les devis en attente sont signés (${conv === null ? 50 : Math.round(conv * 100)} %)</span><span class="value">${fmt(signe + envoye * (conv === null ? 0.5 : conv))}</span></div>
+    </div>`;
+
+  $('dashboard-recent').innerHTML = list.length ? list.slice(0, 5).map((d) => historyItem(d, false)).join('') : '<div class="empty-state">Aucun devis cette année.</div>';
+}
+
+/* =========================================================
+   ORCHESTRATION
+   ========================================================= */
+function activeTab() { return document.querySelector('.tab-btn.active')?.dataset.tab; }
+
+function recalc() {
+  P = computeProfile();
+  PRM = projectParams();
+  J = computeProject(P, currentHours(), PRM);
+  renderCout();
+  renderMarche();
+  renderProjet();
+  const t = activeTab();
+  if (t === 'devis') renderDevis();
+  if (t === 'dashboard') renderDashboard();
+}
+
+function activateTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b) => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.tab-content').forEach((c) => c.classList.toggle('active', c.dataset.content === tab));
+  if (tab === 'devis') renderDevis();
+  if (tab === 'historique') renderHistory();
+  if (tab === 'dashboard') renderDashboard();
+  $('sticky-bar').classList.toggle('show', tab === 'projet');
+  const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  if (btn && btn.scrollIntoView) btn.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+}
+
+function applyPreset(id) {
+  const p = PACKAGES.find((x) => x.id === id);
+  if (!p) return;
+  applyInputs({ 'heures-preprod': p.pre, 'heures-tournage': p.tour, 'heures-postprod': p.post, 'heures-trajet': p.trajet, km: p.km, 'frais-annexes': p.annexes, 'frais-projet': p.frais });
+  store.activePackage = id;
+  if (!$('dev-projet').value) $('dev-projet').value = p.name;
+  renderPresets();
+  recalc();
+  scheduleSave();
+  showToast(`${p.name} appliqué`);
+}
+
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  const btn = document.querySelector('[data-theme-toggle]');
+  btn.innerHTML = ICON(t === 'dark' ? 'moon' : 'sun');
+  btn.setAttribute('aria-label', 'Passer au thème ' + (t === 'dark' ? 'clair' : 'sombre'));
+}
+
+async function exportData() {
+  store.inputs = collectInputs();
+  const name = `lryprod-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
+  const json = JSON.stringify(store, null, 2);
+  try {
+    const file = new File([json], name, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      await navigator.share({ files: [file], title: 'Sauvegarde LRY PROD' });
+      showToast('Sauvegarde partagée');
+      return;
+    }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  showToast('Sauvegarde exportée');
+}
+function importData(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || typeof data !== 'object' || !Array.isArray(data.devis)) throw new Error('format');
+      store = Object.assign({ inputs: {}, theme: null, devis: [], counter: {}, currentDevisId: null, activePackage: null }, data);
+      persist();
+      applyInputs(store.inputs);
+      updateTvaFields();
+      renderPresets();
+      recalc();
+      renderHistory();
+      showToast(`${store.devis.length} devis importés`);
+    } catch (e) { showToast('Fichier invalide'); }
+  };
+  reader.readAsText(file);
+}
+
+/* =========================================================
+   ÉVÉNEMENTS
+   ========================================================= */
+function bindEvents() {
+  document.querySelectorAll('.tab-btn').forEach((b) => b.addEventListener('click', () => activateTab(b.dataset.tab)));
+  document.querySelectorAll('.accordion-trigger').forEach((t) => t.addEventListener('click', () => {
+    const acc = $(t.dataset.accordion);
+    acc.classList.toggle('open');
+    t.setAttribute('aria-expanded', acc.classList.contains('open'));
+  }));
+
+  const onField = (e) => {
+    const el = e.target;
+    if (!el.matches || !el.matches('[data-calc]')) return;
+    if (el.id === 'dev-tva') updateTvaFields();
+    if (el.dataset.calc === 'devis' || el.dataset.calc === 'ident') renderDevis();
+    else recalc();
+    scheduleSave();
+  };
+  document.addEventListener('input', onField);
+  document.addEventListener('change', onField);
+  $('budget-client').addEventListener('input', renderBudget);
+
+  const presetClick = (e) => {
+    const t = e.target.closest('[data-preset]');
+    if (t) { applyPreset(t.dataset.preset); if (t.classList.contains('grille-card')) window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  };
+  $('presets').addEventListener('click', presetClick);
+  $('grille-grid').addEventListener('click', presetClick);
+  $('grille-grid').addEventListener('keydown', (e) => { if (e.key === 'Enter') presetClick(e); });
+
+  $('btn-reset').addEventListener('click', () => {
+    if (!confirm('Remettre le profil financier aux valeurs par défaut ? Vos devis sont conservés.')) return;
+    document.querySelectorAll('[data-calc="cout"]').forEach((el) => { el.value = DEFAULTS[el.id]; });
+    recalc(); scheduleSave('Profil réinitialisé');
+  });
+
+  $('btn-print').addEventListener('click', () => { activateTab('devis'); setTimeout(() => window.print(), 50); });
+  $('btn-copy').addEventListener('click', async () => {
+    const text = devisPlainText();
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (_) {} ta.remove();
+    }
+    showToast('Devis copié');
+  });
+  $('btn-save-devis').addEventListener('click', saveDevis);
+  $('btn-new-devis').addEventListener('click', newDevis);
+  $('sticky-devis').addEventListener('click', () => activateTab('devis'));
+
+  $('devis-history-list').addEventListener('click', (e) => {
+    const l = e.target.closest('[data-load]'); if (l) return loadDevis(l.dataset.load);
+    const d = e.target.closest('[data-del]');
+    if (d && confirm('Supprimer ce devis ?')) {
+      store.devis = store.devis.filter((x) => x.id !== d.dataset.del);
+      if (store.currentDevisId === d.dataset.del) store.currentDevisId = null;
+      persist(); renderHistory(); showToast('Devis supprimé');
+    }
+  });
+  $('devis-history-list').addEventListener('change', (e) => {
+    const s = e.target.closest('[data-status]');
+    if (!s) return;
+    const rec = store.devis.find((x) => x.id === s.dataset.status);
+    if (rec) { rec.status = s.value; persist(); showToast(`Statut : ${STATUS[s.value]}`); }
+  });
+  $('btn-export').addEventListener('click', exportData);
+  $('file-import').addEventListener('change', (e) => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ''; });
+
+  document.querySelector('[data-theme-toggle]').addEventListener('click', () => {
+    const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    setTheme(t); store.theme = t; persist();
+  });
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+captureDefaults();
+loadStore();
+applyInputs(store.inputs);
+let prefersDark = true;
+try { prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
+setTheme(store.theme || (prefersDark ? 'dark' : 'light'));
+updateTvaFields();
+renderSpecialites();
+renderPresets();
+bindEvents();
+recalc();
+renderHistory();
+
+/* =========================================================
+   APPLICATION (PWA)
+   ========================================================= */
+(function pwa() {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isMacSafari = /Macintosh/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome|Chromium|Edg/.test(navigator.userAgent) && navigator.maxTouchPoints === 0;
+
+  // Hors ligne (nécessite https ou localhost)
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      reg.addEventListener('updatefound', () => {
+        const w = reg.installing;
+        w && w.addEventListener('statechange', () => {
+          if (w.state === 'installed' && navigator.serviceWorker.controller) showToast('Mise à jour installée : relancez l\'app');
+        });
+      });
+    }).catch(() => {});
+  }
+  // Demande au système de ne pas effacer les données
+  try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
+
+  // Partage natif du devis (Mail, Messages, WhatsApp…)
+  if (navigator.share) {
+    const b = $('btn-share');
+    b.style.display = '';
+    b.addEventListener('click', async () => {
+      try { await navigator.share({ title: 'Devis ' + devisModel().numero, text: devisPlainText() }); } catch (e) {}
+    });
+  }
+
+  // Aide à l'installation
+  let dismissed = false;
+  try { dismissed = localStorage.getItem('lryprod.hint') === '1'; } catch (e) {}
+  if (!isStandalone && !dismissed && location.protocol !== 'file:') {
+    let txt = '';
+    if (isIOS) txt = 'Installez l\'app : touchez <strong>Partager</strong> puis <strong>Sur l\'écran d\'accueil</strong>.';
+    else if (isMacSafari) txt = 'Installez l\'app : menu <strong>Fichier → Ajouter au Dock</strong>.';
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      $('install-hint-text').innerHTML = 'Installez l\'app sur cet appareil : <button id="do-install" style="color:var(--color-primary);font-weight:600;font-size:inherit;padding:0">Installer</button>';
+      $('install-hint').classList.add('show');
+      $('do-install').addEventListener('click', () => { e.prompt(); $('install-hint').classList.remove('show'); });
+    });
+    if (txt) { $('install-hint-text').innerHTML = txt; $('install-hint').classList.add('show'); }
+  }
+  $('install-hint-close').addEventListener('click', () => {
+    $('install-hint').classList.remove('show');
+    try { localStorage.setItem('lryprod.hint', '1'); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
